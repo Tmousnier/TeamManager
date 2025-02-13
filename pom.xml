@@ -27,28 +27,60 @@
         <url/>
     </scm>
     <properties>
-        <java.version>23</java.version>
+        <java.version>17</java.version> <!-- Utilisation de Java 17, compatible avec Spring Boot 3 -->
     </properties>
     <dependencies>
+        <!-- Spring Boot starter Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Spring Boot starter Test (JUnit 5, Mockito, etc.) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Spring Boot starter Data JPA pour la gestion des bases de données -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- Base de données H2 (si tu utilises une base en mémoire pour les tests) -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
     </dependencies>
+
+
 
     <build>
         <plugins>
+            <!-- Plugin Maven Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!-- Plugin Maven Surefire pour exécuter les tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <forkCount>1C</forkCount> <!-- Utilisation d'un fork par cœur de processeur -->
+                    <reuseForks>true</reuseForks> <!-- Réutilisation des forks pour améliorer la performance -->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
 </project>
