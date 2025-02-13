@@ -1,3 +1,4 @@
+/* Styles pour la section principale */
 .accueil-section {
     display: flex;
     justify-content: center;
@@ -6,35 +7,38 @@
     padding: 40px 20px;
     gap: 30px;
 }
-
 .content {
     display: flex;
-    flex-direction: row;
-    max-width: 1200px;
-    align-items: center;
+    flex-direction: column; /* Les éléments sont disposés verticalement */
+    width: 100%;
+    align-items: center; /* Alignement horizontal au centre */
+    width: 100%; /* content occupe toute la largeur */
 }
-
+.text-image-container { /* Style pour le nouveau conteneur */
+    display: flex;
+    flex-direction: row; /* Disposition horizontale des éléments */
+    align-items: center; /* Alignement vertical au centre */
+    width: 70%; /* Occupe toute la largeur disponible */
+    gap: 10%; /* Espace entre le texte et l'image */
+    margin-bottom: 50px; /* Espace en dessous du conteneur */
+}
 .text-section {
     flex: 1;
 }
-
 .text-section h1 {
     font-size: 36px;
-    color: #1f2937; /* Couleur du texte principal */
+    color: #1f2937;
     margin-bottom: 20px;
 }
-
 .text-section p {
     font-size: 18px;
-    color: #4b5563; /* Couleur secondaire */
+    color: #4b5563;
     margin-bottom: 20px;
 }
-
 .actions {
     display: flex;
     gap: 15px;
 }
-
 .btn {
     display: inline-block;
     padding: 10px 20px;
@@ -45,25 +49,74 @@
     color: white;
     text-align: center;
 }
-
 .blue-btn {
     background-color: #007BFF;
 }
-
 .blue-btn:hover {
     background-color: #0056b3;
 }
-
 .green-btn {
     background-color: #03A64A;
 }
-
 .green-btn:hover {
     background-color: #027a36;
 }
-
 .image-section img {
     max-width: 500px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+/* Styles pour la section "Pourquoi choisir TeamManager ?" */
+.why-choose-section {
+    background-color: #ffffff;
+    padding: 60px 20px;
+    text-align: center;
+    width: 100%;
+}
+.why-choose-section h2 {
+    font-size: 2em;
+    margin-bottom: 40px;
+    color: #333;
+}
+.why-choose-cards {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.why-choose-card {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(30% - 50px);
+    text-align: center;
+    display: flex; /* Utiliser Flexbox pour aligner verticalement le contenu */
+    flex-direction: column; /* Aligner le contenu verticalement */
+    align-items: center; /* Centrer horizontalement le contenu */
+}
+.why-choose-card img {
+    max-width: 80px;
+    margin-bottom: 20px;
+}
+.why-choose-card h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+}
+.why-choose-card p {
+    font-size: 1em;
+    color: #666;
+    flex-grow: 1; /* Permet au paragraphe de prendre l'espace restant */
+}
+/* Responsive design */
+@media (max-width: 768px) {
+    .why-choose-card {
+        width: calc(50% - 20px);
+    }
+}
+@media (max-width: 500px) {
+    .why-choose-card {
+        width: 100%;
+    }
 }
