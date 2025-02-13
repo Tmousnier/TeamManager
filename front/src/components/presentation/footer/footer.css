@@ -1,0 +1,141 @@
+/* Footer Styles */
+.footer {
+    background-color: #1a1d24;
+    color: #fff;
+    padding: 40px 20px;
+    font-size: 14px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.footer-logo {
+    flex: 1;
+    text-align: center;
+    min-width: 200px;
+}
+
+.logo-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: #28a745;
+    border-radius: 8px;
+    margin: 0 auto;
+}
+
+.logo {
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.company-name {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.social-icons svg {
+    font-size: 18px;
+    color: #ddd;
+    cursor: pointer;
+}
+
+.social-icons svg:hover {
+    color: #28a745;
+}
+
+.footer-links {
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+}
+
+.footer-links h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 8px;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.footer-links li:hover {
+    text-decoration: underline;
+    color: #28a745;
+}
+
+.footer-contact {
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+}
+
+.footer-contact h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.footer-contact p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.contact-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.contact-btn:hover {
+    background-color: #0056b3;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #888;
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+}
