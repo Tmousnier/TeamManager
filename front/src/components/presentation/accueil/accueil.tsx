@@ -1,5 +1,6 @@
 import "./accueil.css";
 import teamImage from "../../../assets/imageAccueil.jpg";
+import {Link} from "react-router-dom";
 
 export default function accueil() {
     return (
@@ -12,8 +13,8 @@ export default function accueil() {
                         planification des matchs et la communication avec les joueurs.
                     </p>
                     <div className="actions">
-                        <a href="#join-team" className="btn blue-btn">Rejoindre une équipe</a>
-                        <a href="#register-club" className="btn green-btn">Inscrire mon club</a>
+                        <Link to="/rejoindreEquipe" className="btn blue-btn">Rejoindre une équipe</Link>
+                        <Link to="/inscrireClub" className="btn green-btn">Inscrire mon club</Link>
                     </div>
                 </div>
                 <div className="image-section">
