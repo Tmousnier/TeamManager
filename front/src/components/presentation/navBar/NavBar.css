@@ -3,7 +3,6 @@ body {
     margin: 0;
     padding: 0;
 }
-
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -12,12 +11,10 @@ body {
     padding: 10px 20px;
     color: #000000;
 }
-
 .navbar-brand {
     display: flex;
     align-items: center;
 }
-
 .logo {
     background-color: #03A64A; /* Couleur verte */
     color: white;
@@ -26,50 +23,46 @@ body {
     padding: 5px 10px;
     border-radius: 5px;
 }
-
 .brand-name {
     margin-left: 10px;
     font-size: 18px;
     font-weight: bold;
 }
-
 .navbar-links {
     list-style: none;
     display: flex;
     margin: 0;
     padding: 0;
 }
-
 .navbar-links li {
     margin: 0 10px;
 }
-
-.navbar-links a {
+.navbar-links a { /* Style par défaut des liens */
     text-decoration: none;
     color: #000000;
-    font-size: 14px;
+    font-size: 20px;
+    transition: color 0.3s ease; /* Ajout d'une transition pour la couleur */
 }
-
 .navbar-links a:hover {
     text-decoration: underline;
 }
-
-.navbar-actions .login {
+.navbar-links a.active,  /* Style pour les liens de navigation actifs (y compris la marque) */
+.navbar-actions a.active { /* Style pour les boutons d'action actifs */
+    color: #03A64A; /* Couleur verte (ou la couleur que vous souhaitez) */
+    font-weight: bold; /* Optionnel: Mettre en gras le lien actif */
+    text-decoration: underline; /* Optionnel: Ajouter un soulignement */
+}
+.navbar-actions {
+    display: flex; /* Pour aligner les boutons côte à côte */
+    align-items: center; /* Pour les centrer verticalement */
+}
+.navbar-actions .login, .register-btn {
     margin-right: 10px;
     text-decoration: none;
     color: #000000;
-    font-size: 14px;
+    font-size: 20px;
+    transition: color 0.3s ease; /* Ajout d'une transition pour la couleur */
 }
-
-.navbar-actions .register-btn {
-    background-color: #03A64A;
-    color: #000000;
-    padding: 5px 10px;
-    text-decoration: none;
-    font-size: 14px;
-    border-radius: 5px;
-}
-
-.navbar-actions .register-btn:hover {
-    background-color: #025940;
+.navbar-actions .login:hover, .register-btn:hover {
+    color: #03A64A; /* Changer la couleur au survol */
 }

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom"; // Importez NavLink
 import "./NavBar.css";
 
 export default function NavBar() {
@@ -7,18 +7,36 @@ export default function NavBar() {
             <div className="navbar-brand">
                 <span className="logo">TM</span>
                 <span className="brand-name">
-                     <Link to="/" className="navbar-link">TeamManager</Link>
+                    <NavLink to="/" className="navbar-link" activeClassName="active">
+                        TeamManager
+                    </NavLink>
                 </span>
             </div>
             <ul className="navbar-links">
-                <li><Link to="/fonctionnalites" className="navbar-link">Fonctionnalités</Link></li>
-                <li><Link to="/inscrireClub" className="navbar-link">Inscrire un club</Link></li>
-                <li><Link to="/contact" className="navbar-link">Contact</Link></li>
-                <li><Link to="/apropos" className="navbar-link">À propos</Link></li>
+                <li>
+                    <NavLink to="/fonctionnalites" className="navbar-link" activeClassName="active">
+                        Fonctionnalités
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink to="/inscrireClub" className="navbar-link" activeClassName="active">
+                        Inscrire un club
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink to="/contact" className="navbar-link" activeClassName="active">
+                        Contact
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink to="/apropos" className="navbar-link" activeClassName="active">
+                        À propos
+                    </NavLink>
+                </li>
             </ul>
             <div className="navbar-actions">
-                <Link to="/connexion" className="login">Se connecter</Link>
-                <Link to="/rejoindreEquipe" className="register-btn">Rejoindre une équipe</Link>
+                <NavLink to="/connexion" className="login" activeClassName="active">Se connecter</NavLink> {/* Utilisation de NavLink ici */}
+                <NavLink to="/rejoindreEquipe" className="register-btn" activeClassName="active">Rejoindre une équipe</NavLink> {/* Utilisation de NavLink ici */}
             </div>
         </nav>
     );
