@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import './RejoindreEquipe.css';
 
 interface FormData {
@@ -26,6 +26,27 @@ const RejoindreEquipe: React.FC = () => {
         conditions: false,
     });
 
+    const [sports, setSports] = useState<string[]>([]); // Liste des sports
+    const [clubs, setClubs] = useState<string[]>([]);  // Liste des clubs disponibles
+
+    // Récupérer la liste des sports (à adapter selon votre modèle de données)
+    useEffect(() => {
+        fetch('/api/sport/list')
+            .then(response => response.json())
+            .then(data => setSports(data))
+            .catch(error => console.error('Erreur lors de la récupération des sports:', error));
+    }, []);
+
+    // Récupérer la liste des clubs quand un sport est sélectionné
+    const handleSportChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        const sportNom = event.target.value;
+
+        fetch(`/api/club/listBySport/${sportNom}`)
+            .then(response => response.json())
+            .then(data => setClubs(data.map((club: any) => club.nom)))  // On met à jour la liste des clubs
+            .catch(error => console.error('Erreur lors de la récupération des clubs:', error));
+    };
+
     const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const target = event.target;
 
@@ -46,10 +67,48 @@ const RejoindreEquipe: React.FC = () => {
 
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
-        console.log('Données du formulaire:', formData);
 
-        // Ici, vous pouvez ajouter votre logique pour envoyer les données au backend
-        // fetch('/api/rejoindre', { ... })
+        // Vérifier si l'utilisateur a accepté les conditions
+        if (!formData.conditions) {
+            alert('Vous devez accepter les conditions d\'utilisation');
+            return;
+        }
+
+        // Préparer les données à envoyer
+        const membreData = {
+            nom: formData.nom,
+            prenom: formData.prenom,
+            email: formData.email,
+            motDePasse: formData.motDePasse,
+            dateDeNaissance: formData.dateNaissance,
+            numeroTelephone: formData.telephone,
+            role: formData.role,
+            club: { nom: formData.club }, // Associer le club par son nom (à adapter côté serveur)
+        };
+
+        // Envoi des données au backend
+        fetch('/api/rejoindre', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(membreData),
+        })
+            .then(async response => {
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Erreur serveur');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Message de succès ou redirection
+                alert(data.message || 'Membre ajouté avec succès');
+            })
+            .catch(error => {
+                // Gérer l'erreur
+                alert('Erreur lors de l\'ajout du membre: ' + error.message);
+            });
     };
 
     return (
@@ -99,12 +158,21 @@ const RejoindreEquipe: React.FC = () => {
                             </select>
                         </div>
                         <div className="form-group">
+                            <label htmlFor="sport">Sport :</label>
+                            <select id="sport" name="sport" onChange={handleSportChange} required>
+                                <option value="">Sélectionnez un sport</option>
+                                {sports.map((sport, index) => (
+                                    <option key={index} value={sport}>{sport}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="form-group">
                             <label htmlFor="club">Club :</label>
-                            <select id="club" name="club" value={formData.club} onChange={handleChange}>
+                            <select id="club" name="club" value={formData.club} onChange={handleChange} required>
                                 <option value="">Sélectionnez un club</option>
-                                {/* Ici, vous devrez mapper vos clubs */}
-                                <option value="club1">Club 1</option>
-                                <option value="club2">Club 2</option>
+                                {clubs.map((club, index) => (
+                                    <option key={index} value={club}>{club}</option>
+                                ))}
                             </select>
                         </div>
                         <div className="form-group">
@@ -123,3 +191,4 @@ const RejoindreEquipe: React.FC = () => {
 };
 
 export default RejoindreEquipe;
+
