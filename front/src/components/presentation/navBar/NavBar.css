@@ -14,6 +14,7 @@ body {
 .navbar-brand {
     display: flex;
     align-items: center;
+    color: #000000;
 }
 .logo {
     background-color: #03A64A; /* Couleur verte */
@@ -27,12 +28,18 @@ body {
     margin-left: 10px;
     font-size: 18px;
     font-weight: bold;
+    color: #000000;
+}
+.braand-name hover{
+    color: #03a64a;
+    text-decoration: underline;
 }
 .navbar-links {
     list-style: none;
     display: flex;
     margin: 0;
     padding: 0;
+    color: #000000;
 }
 .navbar-links li {
     margin: 0 10px;
@@ -45,6 +52,7 @@ body {
 }
 .navbar-links a:hover {
     text-decoration: underline;
+    color: #03A64A;
 }
 .navbar-links a.active,  /* Style pour les liens de navigation actifs (y compris la marque) */
 .navbar-actions a.active { /* Style pour les boutons d'action actifs */
@@ -54,8 +62,7 @@ body {
 }
 .navbar-actions {
     display: flex; /* Pour aligner les boutons côte à côte */
-    align-items: center; /* Pour les centrer verticalement */
-}
+    align-items: center; /* Pour les centrer verticalement */}
 .navbar-actions .login, .register-btn {
     margin-right: 10px;
     text-decoration: none;
@@ -65,4 +72,5 @@ body {
 }
 .navbar-actions .login:hover, .register-btn:hover {
     color: #03A64A; /* Changer la couleur au survol */
+    text-decoration: underline;
 }

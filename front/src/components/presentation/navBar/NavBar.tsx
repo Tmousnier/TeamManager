@@ -7,31 +7,21 @@ export default function NavBar() {
             <div className="navbar-brand">
                 <span className="logo">TM</span>
                 <span className="brand-name">
-                    <NavLink to="/" className="navbar-link" activeClassName="active">
-                        TeamManager
-                    </NavLink>
+                    <NavLink to="/">TeamManager</NavLink>
                 </span>
             </div>
             <ul className="navbar-links">
                 <li>
-                    <NavLink to="/fonctionnalites" className="navbar-link" activeClassName="active">
-                        Fonctionnalités
-                    </NavLink>
+                    <NavLink to="/fonctionnalites" className="navbar-link" activeClassName="active">Fonctionnalités</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/inscrireClub" className="navbar-link" activeClassName="active">
-                        Inscrire un club
-                    </NavLink>
+                    <NavLink to="/contact" className="navbar-link" activeClassName="active">Contact</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/contact" className="navbar-link" activeClassName="active">
-                        Contact
-                    </NavLink>
+                    <NavLink to="/apropos" className="navbar-link" activeClassName="active">À propos</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/apropos" className="navbar-link" activeClassName="active">
-                        À propos
-                    </NavLink>
+                    <NavLink to="/inscrireClub" className="navbar-link" activeClassName="active">Inscrire un club</NavLink>
                 </li>
             </ul>
             <div className="navbar-actions">
