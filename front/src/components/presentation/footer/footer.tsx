@@ -1,5 +1,6 @@
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 import "./footer.css";
+import {Link} from "react-router-dom";
 
 const Footer = () => {
     return (
@@ -20,18 +21,17 @@ const Footer = () => {
                 <div className="footer-links">
                     <h4>Navigation rapide</h4>
                     <ul>
-                        <li>Fonctionnalités</li>
-                        <li>Tarifs</li>
-                        <li>Rejoindre une équipe</li>
-                        <li>Inscrire un club</li>
+                        <li><Link to="/fonctionnalites">Fonctionnalités</Link></li>
+                        <li><Link to="/tarifs">Tarifs</Link></li>
+                        <li><Link to="/rejoindreEquipe">Rejoindre une équipe</Link></li>
+                        <li><Link to="/inscrireClub">Inscrire un club</Link></li>
                     </ul>
                 </div>
                 <div className="footer-links">
                     <h4>À propos</h4>
                     <ul>
-                        <li>Qui sommes-nous</li>
-                        <li>Notre équipe</li>
-                        <li>Contact</li>
+                        <li><Link to="/apropos">Qui suis-je ?</Link></li>
+                        <li><Link to="/contrat">Contact</Link></li>
                     </ul>
                 </div>
                 <div className="footer-contact">
@@ -46,5 +46,4 @@ const Footer = () => {
         </footer>
     );
 };
-
 export default Footer;
