@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './inscriptionClub.css';
 
 const InscriptionClub = () => {
@@ -12,30 +13,61 @@ const InscriptionClub = () => {
         sport: '',
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const [messageSucces, setMessageSucces] = useState('');
+    const [messageErreur, setMessageErreur] = useState('');
+    const navigate = useNavigate();
+
+    const handleChange = (e: { target: { name: any; value: any; }; }) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        console.log('Formulaire soumis :', formData);
+        setMessageErreur('');
+        setMessageSucces('');
 
-        // Ici, vous pouvez ajouter votre logique pour envoyer les données au backend
-        // fetch('/api/clubs', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify(formData)
-        // })
-        // .then(res => res.json())
-        // .then(data => console.log('Réponse du serveur :', data))
-        // .catch(err => console.error('Erreur :', err));
+        try {
+            const reponse = await fetch('http://localhost:8080/api/clubs/inscription', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            if (reponse.ok) {
+                // Vérifier si la réponse a un contenu avant d'essayer de l'analyser
+                const contentType = reponse.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const donnees = await reponse.json();
+                    setMessageSucces(donnees.message || 'Inscription réussie !');
+                } else {
+                    setMessageSucces('Inscription réussie !'); // si pas de json, on affiche quand même un message de succes.
+                }
+
+                setTimeout(() => {
+                    navigate('/');
+                }, 2000);
+            } else {
+                // Vérifier si la réponse a un contenu avant d'essayer de l'analyser
+                const contentType = reponse.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const donneesErreur = await reponse.json();
+                    setMessageErreur(donneesErreur.message || 'Erreur lors de l\'inscription.');
+                } else {
+                    setMessageErreur('Une erreur s\'est produite lors de l\'inscription.');
+                }
+            }
+        } catch (erreur) {
+            console.error('Erreur :', erreur);
+            setMessageErreur('Une erreur s\'est produite.');
+        }
     };
-
     return (
-        <div className="centrage-container"> {/* Conteneur pour le centrage */}
+        <div className="centrage-container">
             <div className="inscription-club-container">
                 <div className="form-container">
+                    {messageSucces && <div className="message-succes">{messageSucces}</div>}
+                    {messageErreur && <div className="message-erreur">{messageErreur}</div>}
                     <form className="inscription-form" onSubmit={handleSubmit}>
                         <section>
                             <h3>Informations personnelles</h3>
@@ -126,10 +158,10 @@ const InscriptionClub = () => {
                                     required
                                 >
                                     <option value="">Sélectionnez un sport</option>
-                                    <option value="football">Football</option>
-                                    <option value="basketball">Basketball</option>
-                                    <option value="tennis">Tennis</option>
-                                    <option value="rugby">Rugby</option>
+                                    <option value="Football">Football</option>
+                                    <option value="Basketball">Basketball</option>
+                                    <option value="Handball">Handball</option>
+                                    <option value="Rugby">Rugby</option>
                                 </select>
                             </div>
                         </section>
