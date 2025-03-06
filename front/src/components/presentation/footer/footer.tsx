@@ -1,8 +1,13 @@
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 import "./footer.css";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Footer = () => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate('/contact');
+    };
     return (
         <footer className="footer">
             <div className="footer-container">
@@ -23,7 +28,6 @@ const Footer = () => {
                     <ul>
                         <li><Link to="/fonctionnalites">Fonctionnalités</Link></li>
                         <li><Link to="/tarifs">Tarifs</Link></li>
-                        <li><Link to="/rejoindreEquipe">Rejoindre une équipe</Link></li>
                         <li><Link to="/inscrireClub">Inscrire un club</Link></li>
                     </ul>
                 </div>
@@ -31,13 +35,12 @@ const Footer = () => {
                     <h4>À propos</h4>
                     <ul>
                         <li><Link to="/apropos">Qui suis-je ?</Link></li>
-                        <li><Link to="/contrat">Contact</Link></li>
                     </ul>
                 </div>
                 <div className="footer-contact">
                     <h4>Contact</h4>
                     <p>Des questions ? N'hésitez pas à nous contacter pour plus d'informations.</p>
-                    <button className="contact-btn">Nous contacter</button>
+                    <button className="contact-btn" onClick={handleClick}>Nous contacter</button>
                 </div>
             </div>
             <div className="footer-bottom">

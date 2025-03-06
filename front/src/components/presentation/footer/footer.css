@@ -2,12 +2,14 @@
 /* Footer Global Styles          */
 /* ============================= */
 .footer {
+    display : flex;
+    height: 100%;
     background-color: #1a1d24;
     color: #fff;
     padding: 40px 20px;
     font-size: 14px;
-}
 
+}
 /* ============================= */
 /* Footer Container              */
 /* ============================= */
