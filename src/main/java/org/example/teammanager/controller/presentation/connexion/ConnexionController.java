@@ -1,63 +1,100 @@
 package org.example.teammanager.controller.presentation.connexion;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import org.example.teammanager.config.JwtTokenProvider;
+import org.example.teammanager.dto.JetonJwtResponse;
+import org.example.teammanager.dto.MessageErreurResponse;
 import org.example.teammanager.model.membre.Membre;
-import org.springframework.beans.factory.annotation.Value; // Inject secret key
+import org.example.teammanager.model.membreRoleMembre.MembreRoleMembre;
+import org.example.teammanager.service.membre.MembreService;
+import org.example.teammanager.service.membreRoleMembre.MembreRoleMembreService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/connexion")
 public class ConnexionController {
 
-    @Value("${jwt.secret}") // Inject the secret key from application.properties
-    private String jwtSecret;
-    private final MembreRepository membreRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private static final Logger logger = LoggerFactory.getLogger(ConnexionController.class);
 
-    public ConnexionController(MembreRepository membreRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.membreRepository = membreRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private MembreService membreService;
+
+    @Autowired
+    private MembreRoleMembreService membreRoleMembreService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Membre membre) {
-        Optional<Membre> storedMembreOptional = membreRepository.findByEmail(membre.getEmail());
-        if (storedMembreOptional.isEmpty()) {
-            return ResponseEntity.status(401).body(new ErrorResponse("Invalid credentials")); // Return error object
-        }
+        try {
+            Membre membreEnregistre = membreService.findByEmail(membre.getEmail()).orElseThrow();
 
-        Membre storedMembre = storedMembreOptional.get();
-        if (passwordEncoder.matches(membre.getPassword(), storedMembre.getPassword())) {
-            String jwt = generateJwtToken(membre.getEmail());  // Generate JWT
-            return ResponseEntity.ok(new JwtResponse(jwt)); // Return JWT in a response object
-        }
-        return ResponseEntity.status(401).body(new ErrorResponse("Invalid credentials")); // Return error object
-    }
-    private String generateJwtToken(String email) {
-        long now = System.currentTimeMillis();
-        return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + 86400000)) // Example: 24 hours validity
-                .signWith(SignatureAlgorithm.HS512, jwtSecret) // Use your secret key
-                .compact();
-    }
-    private static class JwtResponse {
-        public String token;
-        public JwtResponse(String token) {
-            this.token = token;
-        }
-    }
-    private static class ErrorResponse {
-        public String message;
-        public ErrorResponse(String message) {
-            this.message = message;
+            if (!passwordEncoder.matches(membre.getPassword(), membreEnregistre.getPassword())) {
+                throw new BadCredentialsException("Identifiants incorrects");
+            }
+
+            List<MembreRoleMembre> membreRoleMembres = membreRoleMembreService.findByIdMembre(membreEnregistre);
+
+            if (membreRoleMembres.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new MessageErreurResponse("Rôle non trouvé pour ce membre"));
+            }
+
+            // Si plusieurs rôles existent, prenez le premier (vous pouvez changer cette logique si nécessaire)
+            MembreRoleMembre membreRoleMembre = membreRoleMembres.get(0);
+
+            String nomRole = membreRoleMembre.getIdRoleMembre().getNomRole();
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    membre.getEmail(),
+                    membreEnregistre.getPassword(),
+                    List.of(new SimpleGrantedAuthority(nomRole))
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jetonJwt = jwtTokenProvider.generateToken(membreRoleMembre);
+
+            return ResponseEntity.ok(new JetonJwtResponse(
+                    jetonJwt,
+                    membreEnregistre.getEmail(),
+                    authentication.getAuthorities().stream().findFirst().orElseThrow().getAuthority()
+            ));
+
+        } catch (AuthenticationException e) {
+            String messageErreur = (e instanceof BadCredentialsException)
+                    ? "Email ou mot de passe incorrect"
+                    : "Erreur d'authentification";
+            logger.error(messageErreur, e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageErreurResponse(messageErreur));
+        } catch (Exception e) {
+            logger.error("Erreur lors de l'authentification", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageErreurResponse("Une erreur est survenue lors de l'authentification."));
         }
     }
 }
