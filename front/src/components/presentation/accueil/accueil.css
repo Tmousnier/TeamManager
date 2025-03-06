@@ -9,18 +9,17 @@
 }
 .content {
     display: flex;
-    flex-direction: column; /* Les éléments sont disposés verticalement */
+    flex-direction: column;
     width: 100%;
-    align-items: center; /* Alignement horizontal au centre */
-    width: 100%; /* content occupe toute la largeur */
+    align-items: center;
 }
-.text-image-container { /* Style pour le nouveau conteneur */
+.text-image-container {
     display: flex;
-    flex-direction: row; /* Disposition horizontale des éléments */
-    align-items: center; /* Alignement vertical au centre */
-    width: 70%; /* Occupe toute la largeur disponible */
-    gap: 10%; /* Espace entre le texte et l'image */
-    margin-bottom: 50px; /* Espace en dessous du conteneur */
+    flex-direction: row;
+    align-items: center;
+    width: 65%;
+    gap: 10%;
+    margin-bottom: 50px;
 }
 .text-section {
     flex: 1;
@@ -66,17 +65,82 @@
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+/* Styles pour les statistiques */
+.statistique-section, .sport-section {
+    width: 100%;
+    margin-bottom: 40px;
+    background-color: #ffffff;
+
+
+}
+.statistique-section h2, .sport-section h2, .why-choose-section h2 {
+    font-size: 2em;
+    margin-bottom: 40px;
+    color: #333;
+    text-align: center; /* Centrer les titres */
+}
+.statistique-section {
+    margin-bottom: 40px;
+    text-align: center; /* Centrer le titre */
+}
+.statistique-section h2 {
+    font-size: 2em;
+    margin-bottom: 20px; /* Réduire la marge en dessous du titre */
+    color: #333;
+}
+.stat-cards-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.stat-card {
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(30% - 20px);
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+.stat-card h2 {
+    font-size: 2em;
+    margin-bottom: 5px;
+    color: #000000;
+}
+.stat-card p {
+    font-size: 1em;
+    color: #000000;
+}
+
+/* Styles pour les sports disponibles */
+.sports-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+.sport-card {
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.sport-card h3 {
+    color: #000;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+.sport-card p {
+    font-size: 1em;
+    color: #666;
+}
+
 /* Styles pour la section "Pourquoi choisir TeamManager ?" */
 .why-choose-section {
     background-color: #ffffff;
     padding: 60px 20px;
     text-align: center;
     width: 100%;
-}
-.why-choose-section h2 {
-    font-size: 2em;
-    margin-bottom: 40px;
-    color: #333;
 }
 .why-choose-cards {
     display: flex;
@@ -91,9 +155,9 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: calc(30% - 50px);
     text-align: center;
-    display: flex; /* Utiliser Flexbox pour aligner verticalement le contenu */
-    flex-direction: column; /* Aligner le contenu verticalement */
-    align-items: center; /* Centrer horizontalement le contenu */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .why-choose-card img {
     max-width: 80px;
@@ -107,16 +171,29 @@
 .why-choose-card p {
     font-size: 1em;
     color: #666;
-    flex-grow: 1; /* Permet au paragraphe de prendre l'espace restant */
+    flex-grow: 1;
 }
+
 /* Responsive design */
 @media (max-width: 768px) {
+    .stat-card {
+        width: calc(50% - 20px);
+    }
     .why-choose-card {
         width: calc(50% - 20px);
     }
+    .sports-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 @media (max-width: 500px) {
+    .stat-card {
+        width: 100%;
+    }
     .why-choose-card {
         width: 100%;
+    }
+    .sports-list {
+        grid-template-columns: 1fr;
     }
 }
