@@ -74,7 +74,7 @@ const Fonctionnalites = () => {
                 <h2>Prêt à améliorer la gestion de votre club ?</h2>
                 <p>Rejoignez les nombreux clubs qui font confiance à notre solution</p>
                 <div className="cta-buttons">
-                    <Link to="/rejoindreEquipe" className="cta-buttons-link">Rejoindre une équipe</Link>
+                    <Link to="/connexion" className="cta-buttons-link">Connexion</Link>
                     <Link to="/inscrireClub" className="cta-buttons-link">Inscrire mon club</Link>
                 </div>
             </div>
