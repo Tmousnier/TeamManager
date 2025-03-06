@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom"; // Importez NavLink
+import {NavLink} from "react-router-dom"; // Importez NavLink
 import "./NavBar.css";
 
 export default function NavBar() {
@@ -20,13 +20,10 @@ export default function NavBar() {
                 <li>
                     <NavLink to="/apropos" className="navbar-link" activeClassName="active">À propos</NavLink>
                 </li>
-                <li>
-                    <NavLink to="/inscrireClub" className="navbar-link" activeClassName="active">Inscrire un club</NavLink>
-                </li>
             </ul>
             <div className="navbar-actions">
-                <NavLink to="/connexion" className="login" activeClassName="active">Se connecter</NavLink> {/* Utilisation de NavLink ici */}
-                <NavLink to="/rejoindreEquipe" className="register-btn" activeClassName="active">Rejoindre une équipe</NavLink> {/* Utilisation de NavLink ici */}
+                <NavLink to="/connexion" className="login" activeClassName="active">Se connecter</NavLink>
+                <NavLink to="/inscrireClub" className="register-btn" activeClassName="active">Inscrire un club</NavLink>
             </div>
         </nav>
     );

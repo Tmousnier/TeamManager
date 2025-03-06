@@ -3,74 +3,109 @@ body {
     margin: 0;
     padding: 0;
 }
+
 .navbar {
     display: flex;
+    flex-wrap: wrap; /* Permet le retour à la ligne sur les petits écrans */
     justify-content: space-between;
     align-items: center;
     background-color: #ffffff;
     padding: 10px 20px;
     color: #000000;
 }
+
 .navbar-brand {
     display: flex;
     align-items: center;
     color: #000000;
+    margin-bottom: 10px; /* Ajoute de la marge en bas sur les petits écrans */
 }
+
 .logo {
-    background-color: #03A64A; /* Couleur verte */
+    background-color: #03A64A;
     color: white;
     font-weight: bold;
     font-size: 18px;
     padding: 5px 10px;
     border-radius: 5px;
 }
+
 .brand-name {
     margin-left: 10px;
     font-size: 18px;
     font-weight: bold;
     color: #000000;
 }
-.braand-name hover{
+
+.brand-name:hover { /* Correction de la faute de frappe "braand-name" */
     color: #03a64a;
     text-decoration: underline;
 }
+
 .navbar-links {
     list-style: none;
     display: flex;
+    flex-wrap: wrap; /* Permet le retour à la ligne */
     margin: 0;
     padding: 0;
     color: #000000;
+    margin-bottom: 10px; /* Ajoute de la marge en bas sur les petits écrans */
 }
+
 .navbar-links li {
-    margin: 0 10px;
+    margin: 5px 10px; /* Réduit la marge pour plus de flexibilité */
 }
-.navbar-links a { /* Style par défaut des liens */
+
+.navbar-links a {
     text-decoration: none;
     color: #000000;
-    font-size: 20px;
-    transition: color 0.3s ease; /* Ajout d'une transition pour la couleur */
+    font-size: 16px; /* Taille de police plus petite par défaut */
+    transition: color 0.3s ease;
 }
+
 .navbar-links a:hover {
     text-decoration: underline;
     color: #03A64A;
 }
-.navbar-links a.active,  /* Style pour les liens de navigation actifs (y compris la marque) */
-.navbar-actions a.active { /* Style pour les boutons d'action actifs */
-    color: #03A64A; /* Couleur verte (ou la couleur que vous souhaitez) */
-    font-weight: bold; /* Optionnel: Mettre en gras le lien actif */
-    text-decoration: underline; /* Optionnel: Ajouter un soulignement */
+
+.navbar-links a.active,
+.navbar-actions a.active {
+    color: #03A64A;
+    font-weight: bold;
+    text-decoration: underline;
 }
+
 .navbar-actions {
-    display: flex; /* Pour aligner les boutons côte à côte */
-    align-items: center; /* Pour les centrer verticalement */}
-.navbar-actions .login, .register-btn {
-    margin-right: 10px;
+    display: flex;
+    flex-wrap: wrap; /* Permet le retour à la ligne */
+    align-items: center;
+}
+
+.navbar-actions .login,
+.register-btn {
+    margin: 5px 10px; /* Réduit la marge pour plus de flexibilité */
     text-decoration: none;
     color: #000000;
-    font-size: 20px;
-    transition: color 0.3s ease; /* Ajout d'une transition pour la couleur */
+    font-size: 16px; /* Taille de police plus petite par défaut */
+    transition: color 0.3s ease;
 }
-.navbar-actions .login:hover, .register-btn:hover {
-    color: #03A64A; /* Changer la couleur au survol */
+
+.navbar-actions .login:hover,
+.navbar-actions .register-btn:hover {
+    color: #03A64A;
     text-decoration: underline;
+}
+
+/* Media query pour les écrans plus petits (par exemple, les mobiles) */
+@media (max-width: 768px) {
+    .navbar-brand,
+    .navbar-links,
+    .navbar-actions {
+        flex-basis: 100%; /* Occupe toute la largeur */
+        text-align: center; /* Centre le texte */
+    }
+
+    .navbar-links {
+        margin-top: 10px; /* Ajoute de la marge en haut pour séparer les éléments */
+    }
 }
