@@ -48,27 +48,28 @@ const Contact = () => {
 
         if (isValid) {
             setIsSubmitting(true);
-            fetch('/api/contact', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => { throw new Error(err.message) });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setSubmitMessage(data.message);
-                    setFormData({ nom: '', prenom: '', email: '', sujet: '', message: '' });
-                    setErrors({ nom: '', prenom: '', email: '', sujet: '', message: '' });
-                })
-                .catch(error => {
-                    setSubmitMessage("Erreur lors de l'envoi du message: " + error.message); // Pas de @ts-ignore
-                    console.error("Erreur:", error);
-                })
-                .finally(() => setIsSubmitting(false));
+            try {
+                const response = await fetch("http://localhost:8080/api/contact", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();  // Si la réponse n'est pas un JSON valide, cela provoque une erreur
+                    throw new Error(err.message);
+                }
+
+                const data = await response.json();  // Si la réponse est vide, cela peut poser un problème
+                setSubmitMessage(data.message);
+                setFormData({ nom: '', prenom: '', email: '', sujet: '', message: '' });
+                setErrors({ nom: '', prenom: '', email: '', sujet: '', message: '' });
+            } catch (error) {
+                // @ts-ignore
+                setSubmitMessage("Erreur lors de l'envoi du message : " + (error.message || "Erreur inconnue"));
+            } finally {
+                setIsSubmitting(false);
+            }
         }
     };
 
@@ -92,7 +93,7 @@ const Contact = () => {
                 </div>
             </div>
             <div className="contact-form">
-                <h2>Contactez-Moi</h2>
+                <h2>Contactez-nous</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="nom">Nom</label>
