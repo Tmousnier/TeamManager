@@ -1,0 +1,10 @@
+services:
+  mysqlContainer:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: "myDB"
+    volumes:
+      - /var/lib/docker/volumes/4de00d29f9232229dfe3ed19c84517596f5e22e2feb82be6bce6c291a200557f/_data:/var/lib/mysql
