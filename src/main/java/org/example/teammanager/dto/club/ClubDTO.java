@@ -9,13 +9,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ClubDTO {
-    private String nom; // Private fields are generally preferred
+    private String nom;
     private String ville;
-    private String address;
+    private String addresse;
     private LocalDateTime dateCreation;
     private String description;
     private String pays;
-    private String adresse;
     private String numeroTelephone; // Consistent naming (camelCase)
 
     public ClubDTO() {}
