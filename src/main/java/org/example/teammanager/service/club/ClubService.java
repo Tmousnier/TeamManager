@@ -12,10 +12,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class ClubService {
-
     @Autowired
     private ClubRepository clubRepository;
-
     public List<ClubDTO> getAllClubs() {
         return clubRepository.findAll().stream()
                 .map(this::convertToDTO)
@@ -29,18 +27,15 @@ public class ClubService {
         Club savedClub = clubRepository.save(club);
         return convertToDTO(savedClub);
     }
-    public void deleteClub(Integer id) {
-        clubRepository.deleteById(id);
-    }
+    public void deleteClub(Integer id) {clubRepository.deleteById(id);}
     private ClubDTO convertToDTO(Club club) {
         ClubDTO dto = new ClubDTO();
         dto.setNom(club.getNom());
         dto.setVille(club.getVille());
-        dto.setAddress(club.getAddress());
+        dto.setAddresse(club.getAddresse());
         dto.setDateCreation(club.getDateCreation());
         dto.setDescription(club.getDescription());
         dto.setPays(club.getPays());
-        dto.setAdresse(club.getAdresse());
         dto.setNumeroTelephone(club.getNumeroTelephone());
         return dto;
     }
@@ -48,15 +43,11 @@ public class ClubService {
         Club club = new Club();
         club.setNom(clubDTO.getNom());
         club.setVille(clubDTO.getVille());
-        club.setAddress(clubDTO.getAddress());
+        club.setAddresse(clubDTO.getAddresse());
         club.setDateCreation(clubDTO.getDateCreation());
         club.setDescription(clubDTO.getDescription());
         club.setPays(clubDTO.getPays());
-        club.setAdresse(clubDTO.getAdresse());
         club.setNumeroTelephone(clubDTO.getNumeroTelephone());
         return club;
-    }
-    public long countAllClubs() {
-        return clubRepository.count();
     }
 }

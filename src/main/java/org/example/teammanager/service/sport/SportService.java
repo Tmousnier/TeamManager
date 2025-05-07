@@ -1,6 +1,7 @@
 package org.example.teammanager.service.sport;
 
 import org.example.teammanager.dto.sport.SportDTO;
+import org.example.teammanager.dto.sport.SportEquipeDTO;
 import org.example.teammanager.model.sport.Sport;
 import org.example.teammanager.repository.sport.SportRepository;
 import org.example.teammanager.repository.sportClub.SportClubRepository;
@@ -47,14 +48,13 @@ public class SportService {
         return sport;
     }
 
-    public List<SportDTO> getAllSportsWithClubCount() {
+    public List<SportEquipeDTO> getAllSportsWithClubCount() {
         return sportClubRepository.getAllSportsWithClubCount().stream()
                 .map(obj -> {
                     Object[] objects = (Object[]) obj; // Cast explicite
-                    SportDTO dto = new SportDTO();
-                    dto.setId((Integer) objects[0]);
-                    dto.setNom((String) objects[1]);
-                    dto.setNombreClubs(((Long) objects[2]).intValue());
+                    SportEquipeDTO dto = new SportEquipeDTO();
+                    dto.setSportNom((String) objects[1]);
+                    dto.setNombreEquipes((Long) objects[2]);
                     return dto;
                 })
                 .collect(Collectors.toList());

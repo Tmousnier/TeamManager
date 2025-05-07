@@ -1,4 +1,4 @@
-package org.example.teammanager.service;
+package org.example.teammanager.service.Presentation;
 
 import org.example.teammanager.model.membre.Membre;
 import org.example.teammanager.model.membreRoleMembre.MembreRoleMembre;
@@ -43,7 +43,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             return AuthorityUtils.NO_AUTHORITIES; // Aucun rôle
         }
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getIdRoleMembre().getNomRole()))
+                .map(role -> new SimpleGrantedAuthority(role.getRoleMembre().getNomRole()))
                 .collect(Collectors.toList());
     }
 }

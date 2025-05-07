@@ -40,21 +40,12 @@ public class SportClubService {
                 .collect(Collectors.toList());
     }
 
-    // ... other service methods as needed (create, update, delete)
-
     private SportClubDTO convertToDTO(SportClub sportClub) {
         SportClubDTO dto = new SportClubDTO();
         // Convert Sport and Club entities to DTOs.  Important to avoid circular dependencies
         dto.setSport(convertSportToDTO(sportClub.getSport()));
         dto.setClub(convertClubToDTO(sportClub.getClub()));
         return dto;
-    }
-
-    private SportClub convertToEntity(SportClubDTO sportClubDTO) {
-        SportClub sportClub = new SportClub();
-        // Convert Sport and Club DTOs to entities
-        // ... (Implement the conversion logic)
-        return sportClub;
     }
 
     private SportDTO convertSportToDTO(Sport sport) {
@@ -67,11 +58,10 @@ public class SportClubService {
         ClubDTO clubDTO = new ClubDTO();
         clubDTO.setNom(club.getNom());
         clubDTO.setVille(club.getVille());
-        clubDTO.setAddress(club.getAddress());
+        clubDTO.setAddresse(club.getAddresse());
         clubDTO.setDateCreation(club.getDateCreation());
         clubDTO.setDescription(club.getDescription());
         clubDTO.setPays(club.getPays());
-        clubDTO.setAdresse(club.getAdresse());
         clubDTO.setNumeroTelephone(club.getNumeroTelephone());
         return clubDTO;
     }
