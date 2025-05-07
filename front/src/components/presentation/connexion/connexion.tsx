@@ -51,9 +51,17 @@ const Login = () => {
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("email", response.data.email);
             localStorage.setItem("role", response.data.role);
+            localStorage.setItem("idEquipe", response.data.id);
+            localStorage.setItem("idClub", response.data.idMembre);
+            localStorage.setItem("nomEquipe", response.data.nomEquipe);
+
 
             alert("Connexion réussie !");
-            navigate("/"); // Redirection vers la page d'accueil
+            if (response.data.role === 'Dirigeant') {
+                navigate('/');
+            } else {
+                navigate(`/equipe/${response.data.nomEquipe}`);
+            }
         } catch (error) {
             // @ts-ignore
             setErrorMessage(error.response?.data?.message || "Erreur de connexion");

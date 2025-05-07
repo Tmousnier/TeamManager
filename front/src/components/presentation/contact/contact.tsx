@@ -1,30 +1,44 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import './Contact.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhone, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
+
+interface FormData {
+    nom: string;
+    prenom: string;
+    email: string;
+    sujet: string;
+    message: string;
+    [key: string]: string;
+}
 
 const Contact = () => {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormData>({
         nom: '',
         prenom: '',
         email: '',
         sujet: '',
         message: ''
     });
-    const [errors, setErrors] = useState({
-        nom: '',
-        prenom: '',
-        email: '',
-        sujet: '',
-        message: ''
-    });
-    const [submitMessage, setSubmitMessage] = useState<string | null>(null); // Type string | null
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleChange = (e: { target: { name: any; value: any; }; }) => {
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-        setErrors({ ...errors, [name]: '' });
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value
+        }));
+        setErrors((prevState) => ({
+            ...prevState,
+            [name]: ''
+        }));
         setSubmitMessage(null);
     };
 
@@ -33,9 +47,9 @@ const Contact = () => {
         return re.test(email);
     };
 
-    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const newErrors = { nom: '', prenom: '', sujet: '', message: '', email: '' };
+        const newErrors: { [key: string]: string } = {};
         let isValid = true;
 
         if (!formData.nom.trim()) { newErrors.nom = "Le nom est requis."; isValid = false; }
@@ -43,33 +57,33 @@ const Contact = () => {
         if (!formData.sujet.trim()) { newErrors.sujet = "Le sujet est requis."; isValid = false; }
         if (!formData.message.trim()) { newErrors.message = "Le message est requis."; isValid = false; }
         if (!formData.email.trim() || !validateEmail(formData.email)) { newErrors.email = "L'email est invalide."; isValid = false; }
+        if (!captchaToken) { newErrors["captcha"] = "Veuillez valider le ReCAPTCHA."; isValid = false; }
 
         setErrors(newErrors);
+        if (!isValid) return;
 
-        if (isValid) {
-            setIsSubmitting(true);
-            try {
-                const response = await fetch("http://localhost:8080/api/contact", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
+        setIsSubmitting(true);
+        const token = uuidv4();
 
-                if (!response.ok) {
-                    const err = await response.json();  // Si la réponse n'est pas un JSON valide, cela provoque une erreur
-                    throw new Error(err.message);
-                }
-
-                const data = await response.json();  // Si la réponse est vide, cela peut poser un problème
-                setSubmitMessage(data.message);
-                setFormData({ nom: '', prenom: '', email: '', sujet: '', message: '' });
-                setErrors({ nom: '', prenom: '', email: '', sujet: '', message: '' });
-            } catch (error) {
-                // @ts-ignore
-                setSubmitMessage("Erreur lors de l'envoi du message : " + (error.message || "Erreur inconnue"));
-            } finally {
-                setIsSubmitting(false);
+        try {
+            const response = await axios.post("http://localhost:8080/api/contact", {
+                ...formData,
+                token,
+                captcha: captchaToken
+            });
+            setSubmitMessage(response.data.message);
+            setFormData({ nom: '', prenom: '', email: '', sujet: '', message: '' });
+            setErrors({});
+        } catch (error: any) {
+            if (error.response) {
+                setSubmitMessage(`Erreur serveur : ${error.response.status} - ${error.response.data.message}`);
+            } else if (error.request) {
+                setSubmitMessage("Erreur réseau : Impossible de contacter le serveur.");
+            } else {
+                setSubmitMessage("Erreur : " + error.message);
             }
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -120,6 +134,16 @@ const Contact = () => {
                         <textarea id="message" name="message" rows={5} value={formData.message} onChange={handleChange} required></textarea>
                         {errors.message && <span className="error">{errors.message}</span>}
                     </div>
+
+                    {/* Ajout du ReCAPTCHA */}
+                    <div className="form-group">
+                        <ReCAPTCHA
+                            sitekey="VOTRE_SITE_KEY"
+                            onChange={(token) => setCaptchaToken(token)}
+                        />
+                        {errors["captcha"] && <span className="error">{errors["captcha"]}</span>}
+                    </div>
+
                     <button type="submit" disabled={isSubmitting}>
                         {isSubmitting ? "Envoi en cours..." : "Envoyer le message"}
                     </button>
@@ -129,4 +153,5 @@ const Contact = () => {
         </div>
     );
 };
+
 export default Contact;

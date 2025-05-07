@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import {JSX, useEffect, useState} from "react";
 import "./accueil.css";
-import teamImage from "../../../../public/image/imageAccueil.jpg";
 import { Link } from "react-router-dom";
 
 interface Sport {
@@ -8,10 +7,17 @@ interface Sport {
     nombreEquipes: number;
 }
 
-export default function Accueil() {
-    const [stats, setStats] = useState({ members: 0, clubs: 0, equipes: 0 });
+interface Stats {
+    members: number;
+    clubs: number;
+    equipes: number;
+}
+
+export default function Accueil(): JSX.Element {
+    const [stats, setStats] = useState<Stats>({ members: 0, clubs: 0, equipes: 0 });
     const [sportsStats, setSportsStats] = useState<Sport[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
+
     useEffect(() => {
         // Récupérer les statistiques globales
         fetch("http://localhost:8080/api/accueil/stats")
@@ -19,10 +25,9 @@ export default function Accueil() {
                 if (!res.ok) {
                     throw new Error("Erreur lors du chargement des statistiques");
                 }
-                return res.json(); // Vérifier que la réponse est parsée en JSON
+                return res.json();
             })
             .then((data) => {
-                console.log("Données reçues de /api/accueil/stats:", data);
                 setStats(data);
                 setLoading(false);
             })
@@ -37,16 +42,20 @@ export default function Accueil() {
                 if (!res.ok) {
                     throw new Error("Erreur lors du chargement des statistiques des sports");
                 }
-                return res.json(); // Vérifier que la réponse est parsée en JSON
+                return res.json();
             })
             .then((data) => {
-                console.log("Données reçues de /api/accueil/stats/sports:", data);
-                setSportsStats(data);
+                if (Array.isArray(data)) {
+                    setSportsStats(data);
+                } else {
+                    console.error("Les données reçues ne sont pas un tableau:", data);
+                }
             })
             .catch((err) => {
                 console.error("Erreur chargement stats sports", err);
             });
     }, []);
+
     return (
         <section className="accueil-section">
             <div className="content">
@@ -60,11 +69,10 @@ export default function Accueil() {
                         </div>
                     </div>
                     <div className="image-section">
-                        <img rel="preload" src={teamImage} alt="Équipe sportive"/>
+                        <img rel="preload" src="/image/imageAccueil.jpg" alt="Équipe sportive" />
                     </div>
                 </div>
 
-                {/* Section Statistiques */}
                 <div className="statistique-section">
                     <h2>Statistiques</h2>
                     <div className="stat-cards-container">
@@ -83,29 +91,31 @@ export default function Accueil() {
                     </div>
                 </div>
 
-                {/* Section Sports */}
                 <div className="sport-section">
                     <h2>Sports disponibles</h2>
                     <div className="sports-list">
                         {loading ? (
                             <div>Chargement...</div>
                         ) : (
-                            sportsStats.map((sport, index) => (
-                                <div key={index} className="sport-card">
-                                    <h3>{sport.sportNom}</h3>
-                                    <p>{sport.nombreEquipes} équipes</p>
-                                </div>
-                            ))
+                            Array.isArray(sportsStats) && sportsStats.length > 0 ? (
+                                sportsStats.map((sport, index) => (
+                                    <div key={index} className="sport-card">
+                                        <h3>{sport.sportNom}</h3>
+                                        <p>{sport.nombreEquipes} équipes</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <div>Aucun sport disponible.</div>
+                            )
                         )}
                     </div>
                 </div>
 
-                {/* Section "Pourquoi choisir TeamManager ?" */}
                 <div className="why-choose-section">
                     <h2>Pourquoi choisir TeamManager ?</h2>
                     <div className="why-choose-cards">
                         <div className="why-choose-card">
-                            <img src="../../../../public/image/icone1.png" alt="Gestion simplifiée"/>
+                            <img src="/image/icone1.png" alt="Gestion simplifiée" />
                             <h3>Gestion simplifiée</h3>
                             <p>
                                 Gérez facilement les effectifs, les présences et les
@@ -113,7 +123,7 @@ export default function Accueil() {
                             </p>
                         </div>
                         <div className="why-choose-card">
-                            <img src="../../../../public/image/icone2.png" alt="Planification efficace"/>
+                            <img src="/image/icone2.png" alt="Planification efficace" />
                             <h3>Planification efficace</h3>
                             <p>
                                 Organisez les matchs, les entrainements et les
@@ -121,7 +131,7 @@ export default function Accueil() {
                             </p>
                         </div>
                         <div className="why-choose-card">
-                            <img src="../../../../public/image/icone3.png" alt="Suivi complet"/>
+                            <img src="/image/icone3.png" alt="Suivi complet" />
                             <h3>Suivi complet</h3>
                             <p>
                                 Suivez les performances, les statistiques et la
