@@ -26,8 +26,8 @@ public class JwtTokenProvider {
      */
     public String generateToken(MembreRoleMembre membreRoleMembre) {
         return Jwts.builder()
-                .setSubject(membreRoleMembre.getIdMembre().getEmail())
-                .claim("roles", List.of(membreRoleMembre.getIdRoleMembre().getNomRole())) // Assurer que les rôles sont une liste
+                .setSubject(membreRoleMembre.getMembre().getEmail())
+                .claim("roles", List.of(membreRoleMembre.getRoleMembre().getNomRole())) // Assurer que les rôles sont une liste
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_MS))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();

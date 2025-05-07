@@ -32,10 +32,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("Début du filtre JWT"); // Log au début du filtre
         String token = getTokenFromRequest(request);
         if (token != null) {
-            System.out.println("Token trouvé: " + token);  // Ajouter un log pour voir si un token est présent
-        } else {
+            System.out.println("Token trouvé: " + token);
+        }else {
             System.out.println("Aucun token trouvé dans la requête");  // Aucun token trouvé
         }
 
