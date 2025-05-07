@@ -16,7 +16,6 @@ import jakarta.persistence.*;
 @Entity
 @Data
 @AllArgsConstructor
-@Builder
 @NoArgsConstructor
 public class Membre {
 
@@ -32,18 +31,6 @@ public class Membre {
     private String password;
     private Date dateInscription;
 
-
-
-    @OneToMany(mappedBy = "idMembre", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "membre", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<MembreRoleMembre> membreRoleMembres;
-
-
-    public Collection<RoleMembre> getRoles() {
-        if (membreRoleMembres == null) {
-            return List.of(); // or Collections.emptyList()
-        }
-        return membreRoleMembres.stream()
-                .map(MembreRoleMembre::getIdRoleMembre)
-                .collect(Collectors.toList());
-    }
 }
