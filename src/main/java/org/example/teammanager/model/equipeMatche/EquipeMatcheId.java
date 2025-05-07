@@ -1,16 +1,15 @@
-package org.example.teammanager.model.equipeMembre;
+package org.example.teammanager.model.equipeMatche;
 
 import jakarta.persistence.Embeddable;
 import lombok.*;
-
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @Embeddable
-public class EquipeMembreId implements Serializable {
+public class EquipeMatcheId {
     private Integer idEquipe;
-    private Integer idMembre;
+    private Integer idMatche;
 }
+

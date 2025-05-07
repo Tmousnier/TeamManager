@@ -19,8 +19,8 @@ public class Club {
     @Column(name = "ville")
     private String ville;
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "addresse")
+    private String addresse;
 
     @Column(name = "date_creation")
     private LocalDateTime dateCreation;
@@ -30,9 +30,6 @@ public class Club {
 
     @Column(name = "pays")
     private String pays;
-
-    @Column(name = "adresse")
-    private String adresse;
 
     @Column(name = "numero_telephone")
     private String numeroTelephone;

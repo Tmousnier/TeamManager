@@ -1,33 +1,26 @@
 package org.example.teammanager.model.membreRoleMembre;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 import org.example.teammanager.model.membre.Membre;
 import org.example.teammanager.model.roleMembre.RoleMembre;
 
-@Getter
+@Data
 @Entity
-@Table(name = "membre_role_membre")
 @IdClass(MembreRoleMembreId.class)
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "membre_role_membre")
 public class MembreRoleMembre {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id_membre", referencedColumnName = "id")
-    private Membre idMembre;
+    @JoinColumn(name = "id_membre", referencedColumnName = "id", nullable = false)
+    private Membre membre;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id_role_membre", referencedColumnName = "id")
-    private RoleMembre idRoleMembre;
+    @JoinColumn(name = "id_role_membre", referencedColumnName = "id", nullable = false)
+    private RoleMembre roleMembre;
 
-    public MembreRoleMembre() {}  // No-args constructor (important for JPA)
-
-    public void setIdMembre(Membre idMembre) {
-        this.idMembre = idMembre;
-    }
-
-    public void setIdRoleMembre(RoleMembre idRoleMembre) {
-        this.idRoleMembre = idRoleMembre;
-    }
 }

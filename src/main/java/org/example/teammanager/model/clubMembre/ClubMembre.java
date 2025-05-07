@@ -5,8 +5,7 @@ import lombok.*;
 import org.example.teammanager.model.club.Club;
 import org.example.teammanager.model.membre.Membre;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -17,12 +16,12 @@ public class ClubMembre {
         private ClubMembreId id;
 
         @ManyToOne
-        @MapsId("idClub") // Associe ce champ avec la clé primaire composite
-        @JoinColumn(name = "id_club")
+        @MapsId("idClub") // Lie idClub de ClubMembreId à la relation Club
+        @JoinColumn(name = "id_club", referencedColumnName = "id")
         private Club club;
 
         @ManyToOne
-        @MapsId("idMembre") // Associe ce champ avec la clé primaire composite
-        @JoinColumn(name = "id_membre")
+        @MapsId("idMembre") // Lie idMembre de ClubMembreId à la relation Membre
+        @JoinColumn(name = "id_membre", referencedColumnName = "id")
         private Membre membre;
 }

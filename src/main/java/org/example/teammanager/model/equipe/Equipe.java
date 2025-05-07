@@ -3,6 +3,9 @@ package org.example.teammanager.model.equipe;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import org.example.teammanager.model.equipeEvenement.EquipeEvenement;
+
+import java.util.List;
 
 @Entity
 @Table(name = "equipe")
@@ -19,5 +22,6 @@ public class Equipe {
     private String poule;
     private String genre;
 
-    public Equipe() {}
+    @OneToMany(mappedBy = "equipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<EquipeEvenement> equipeEvenements;
 }

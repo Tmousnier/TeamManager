@@ -1,8 +1,7 @@
-package org.example.teammanager.model.equipeMembre;
+package org.example.teammanager.model.equipeEvenement;
 
 import jakarta.persistence.Embeddable;
 import lombok.*;
-
 import java.io.Serializable;
 
 @Data
@@ -10,7 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Embeddable
-public class EquipeMembreId implements Serializable {
+public class EquipeEvenementId implements Serializable {
     private Integer idEquipe;
-    private Integer idMembre;
+    private Integer idEvenement;
 }

@@ -1,12 +1,13 @@
 package org.example.teammanager.model.equipeMembre;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.teammanager.model.equipe.Equipe;
 import org.example.teammanager.model.membre.Membre;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -17,12 +18,12 @@ public class EquipeMembre {
     private EquipeMembreId id;
 
     @ManyToOne
-    @MapsId("idEquipe") // Associe ce champ avec la clé primaire composite
-    @JoinColumn(name = "id_Equipe")
+    @MapsId("idEquipe") // Lie idEquipe de EquipeMembreId à la relation Equipe
+    @JoinColumn(name = "id_equipe", referencedColumnName = "id")
     private Equipe equipe;
 
     @ManyToOne
-    @MapsId("idMembre") // Associe ce champ avec la clé primaire composite
-    @JoinColumn(name = "id_Membre")
+    @MapsId("idMembre") // Lie idMembre de EquipeMembreId à la relation Membre
+    @JoinColumn(name = "id_membre", referencedColumnName = "id")
     private Membre membre;
 }
