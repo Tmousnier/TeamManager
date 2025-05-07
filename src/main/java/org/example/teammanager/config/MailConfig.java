@@ -16,7 +16,7 @@ public class MailConfig {
         mailSender.setHost("smtp.gmail.com");  // Utilise le SMTP de ton fournisseur (ici Gmail)
         mailSender.setPort(587); // Port SMTP de Gmail
         mailSender.setUsername("mousniert.pro@gmail.com"); // Remplace par ton email
-        mailSender.setPassword("oeuu dfdb eipr lann"); // Utilise un mot de passe d'application
+        mailSender.setPassword("owrxm mibg nhpe nwei "); // Utilise un mot de passe d'application
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
