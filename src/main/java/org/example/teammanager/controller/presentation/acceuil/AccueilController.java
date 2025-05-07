@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,19 +52,17 @@ public class AccueilController {
 
     /**Récupère le nombre d'équipes par sport.*/
     @GetMapping("/stats/sports")
-    public ResponseEntity<Map<String, Long>> getStatsBySport() {
+    public ResponseEntity<List<SportEquipeDTO>> getStatsBySport() {
         try {
             List<SportEquipeDTO> stats = equipeRepository.countTeamsBySport();
-            Map<String, Long> result = stats.stream()
-                    .collect(Collectors.toMap(
-                            SportEquipeDTO::getSportNom,
-                            SportEquipeDTO::getNombreEquipes
-                    ));
+            List<SportEquipeDTO> result = stats.stream()
+                    .map(dto -> new SportEquipeDTO(dto.getSportNom(), dto.getNombreEquipes()))
+                    .collect(Collectors.toList());
 
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             logger.error("Erreur lors de la récupération des statistiques des sports : {}", e.getMessage(), e);
-            return internalServerError().body(Collections.singletonMap("error", Long.valueOf("Erreur lors de la récupération des statistiques des sports")));
+            return internalServerError().body(List.of()); // Retourne une liste vide en cas d'erreur
         }
     }
 

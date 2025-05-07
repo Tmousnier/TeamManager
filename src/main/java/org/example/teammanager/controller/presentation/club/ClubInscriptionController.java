@@ -5,6 +5,7 @@ import org.example.teammanager.mapper.ClubMapper;
 import org.example.teammanager.model.club.Club;
 import org.example.teammanager.model.membre.Membre;
 import org.example.teammanager.model.membreRoleMembre.MembreRoleMembre;
+import org.example.teammanager.model.membreRoleMembre.MembreRoleMembreId;
 import org.example.teammanager.model.roleMembre.RoleMembre;
 import org.example.teammanager.model.sport.Sport;
 import org.example.teammanager.model.sportClub.SportClub;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/clubs")
@@ -49,8 +52,14 @@ public class ClubInscriptionController {
     @Transactional
     public ResponseEntity<?> inscrireClub(@RequestBody ClubInscriptionDTO clubInscriptionDTO) {
         try {
-            Club club = clubRepository.save(clubMapper.toClub(clubInscriptionDTO));
-
+            // Création du club
+            if (clubRepository.existsByNom(clubInscriptionDTO.getNom())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Le nom du club existe déjà.");
+            }
+            Club club = clubMapper.inscribe(clubInscriptionDTO);
+            club.setDateCreation(LocalDateTime.now());
+            club = clubRepository.save(club);
+            // Création du membre
             Membre membre = new Membre();
             membre.setNom(clubInscriptionDTO.getNom());
             membre.setPrenom(clubInscriptionDTO.getPrenom());
@@ -67,14 +76,14 @@ public class ClubInscriptionController {
             sportClub.setSport(sport);
             sportClubRepository.save(sportClub);
 
-            // Récupérer le rôle "dirigeant"
+            // Récupération du rôle "Dirigeant"
             RoleMembre roleDirigeant = roleMembreRepository.findByNomRole("Dirigeant")
                     .orElseThrow(() -> new RuntimeException("Rôle dirigeant non trouvé"));
 
             // Créer et enregistrer l'association MembreRoleMembre
             MembreRoleMembre membreRoleMembre = new MembreRoleMembre();
-            membreRoleMembre.setIdMembre(membre);
-            membreRoleMembre.setIdRoleMembre(roleDirigeant);
+            membreRoleMembre.setMembre(membre);
+            membreRoleMembre.setRoleMembre(roleDirigeant);
             membreRoleMembreRepository.save(membreRoleMembre);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Club et dirigeant créés avec succès.");
