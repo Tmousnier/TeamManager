@@ -7,13 +7,12 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ClubMapper {
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", ignore = true)   // Correction de "addresse"
+    @Mapping(target = "nom", source = "nomClub") // Conserver un seul mappage pour "nom"
     @Mapping(target = "ville", ignore = true)
-    @Mapping(target = "addresse", ignore = true)
     @Mapping(target = "dateCreation", ignore = true)
     @Mapping(target = "description", ignore = true)
     @Mapping(target = "pays", ignore = true)
     @Mapping(target = "numeroTelephone", ignore = true)
-    @Mapping(target = "nom", source = "nomClub") // Mappage de nomClub à nom
     Club inscribe(ClubInscriptionDTO clubInscriptionDTO);
 }
