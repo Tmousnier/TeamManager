@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 public class ClubDTO {
     private String nom;
     private String ville;
-    private String addresse;
     private LocalDateTime dateCreation;
     private String description;
     private String pays;
