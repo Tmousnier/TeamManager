@@ -1,19 +1,17 @@
 package org.example.teammanager.config.generate;
 
-import java.security.SecureRandom;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import java.util.Base64;
 
 public class SecretKeyGenerator {
-    public static void main(String[] args) {
-        // Générer une clé secrète stable pour le JWT
-        SecureRandom random = new SecureRandom();
-        byte[] key = new byte[64]; // Choisir une taille de clé (par exemple, 64 octets)
-        random.nextBytes(key);
+    public static void main(String[] args) throws Exception {
+        KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA512");
+        keyGen.init(512); // Specify key size
+        SecretKey secretKey = keyGen.generateKey();
+        String base64EncodedKey = Base64.getEncoder().encodeToString(secretKey.getEncoded());
 
-        // Convertir la clé en Base64
-        String base64Key = Base64.getEncoder().encodeToString(key);
-
-        // Afficher la clé générée
-        System.out.println("Clé secrète JWT : " + base64Key);
+        System.out.println("Generated Base64-Encoded Key: " + base64EncodedKey);
     }
+
 }

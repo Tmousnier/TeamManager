@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -32,12 +34,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("Début du filtre JWT"); // Log au début du filtre
+        log.info("Début du filtre JWT"); // Log au début du filtre
         String token = getTokenFromRequest(request);
         if (token != null) {
-            System.out.println("Token trouvé: " + token);
+            log.info("Token trouvé: {}", token);
         }else {
-            System.out.println("Aucun token trouvé dans la requête");  // Aucun token trouvé
+            log.info("Aucun token trouvé dans la requête");  // Aucun token trouvé
         }
 
         try {
@@ -49,19 +51,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (ExpiredJwtException ex) {
-            System.out.println("Token expiré : " + ex.getMessage());  // Log du token expiré
+            log.info("Token expiré : {}", ex.getMessage());  // Log du token expiré
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"Token expiré\"}");
             return;
         } catch (SignatureException | MalformedJwtException ex) {
-            System.out.println("Erreur de signature ou de format : " + ex.getMessage());  // Log de l'erreur
+            log.info("Erreur de signature ou de format : {}", ex.getMessage());  // Log de l'erreur
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"Signature de jeton invalide ou jeton malformé\"}");
             return;
         } catch (Exception ex) {
-            System.out.println("Erreur inconnue : " + ex.getMessage());  // Log d'erreur générique
+            log.info("Erreur inconnue : {}", ex.getMessage());  // Log d'erreur générique
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"Erreur interne du serveur\"}");

@@ -1,62 +1,57 @@
+// src/main/java/org/example/teammanager/config/JwtTokenProvider.java
 package org.example.teammanager.config;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.teammanager.model.membreRoleMembre.MembreRoleMembre;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
 @Component
 public class JwtTokenProvider {
 
-    private static final long JWT_EXPIRATION_MS = 3600000; // 1 heure
+    private static final long JWT_EXPIRATION_MS = 86400000;
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+    private final byte[] signingKey;
 
-    /**
-     * Génère un JWT à partir des informations du membre.
-     *
-     * @param membreRoleMembre Le membre pour lequel générer le token
-     * @return Le token JWT généré
-     */
+    public JwtTokenProvider(JwtConfig jwtConfig) {
+        try {
+            this.signingKey = Base64.getDecoder().decode(jwtConfig.getSecret());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("La clé JWT n'est pas encodée en Base64 ou est invalide.", e);
+        }
+    }
+
+    @PostConstruct
+    public void logKeyInfo() {
+        System.out.println("[INFO] Clé JWT correctement chargée (" + signingKey.length + " octets).");
+    }
+
     public String generateToken(MembreRoleMembre membreRoleMembre) {
         return Jwts.builder()
                 .setSubject(membreRoleMembre.getMembre().getEmail())
-                .claim("roles", List.of(membreRoleMembre.getRoleMembre().getNomRole())) // Assurer que les rôles sont une liste
+                .claim("roles", List.of(membreRoleMembre.getRoleMembre().getNomRole()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION_MS))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    /**
-     * Récupère le token JWT depuis la requête HTTP.
-     *
-     * @param request La requête HTTP
-     * @return Le token JWT ou null si absent
-     */
     public String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (org.springframework.util.StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7); // Extrait le token sans le préfixe "Bearer "
+            return bearerToken.substring(7);
         }
         return null;
     }
 
-    /**
-     * Valide un token JWT.
-     *
-     * @param token Le token JWT à valider
-     * @return true si le token est valide, false sinon
-     */
     public boolean validateToken(String token) {
         try {
-            // Vérification de la validité du token
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(signingKey).build().parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException ex) {
             throw new JwtExpiredException();
@@ -71,27 +66,14 @@ public class JwtTokenProvider {
         }
     }
 
-    /**
-     * Récupère le nom d'utilisateur (email) depuis le token JWT.
-     *
-     * @param token Le token JWT
-     * @return L'email du membre
-     */
     public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parserBuilder().setSigningKey(signingKey).build().parseClaimsJws(token).getBody();
         return claims.getSubject();
     }
 
-    /**
-     * Récupère les rôles depuis le token JWT.
-     *
-     * @param token Le token JWT
-     * @return La liste des rôles
-     */
     public List<String> getRolesFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-        List<String> roles = (List<String>) claims.get("roles");
-        return roles;
+        Claims claims = Jwts.parserBuilder().setSigningKey(signingKey).build().parseClaimsJws(token).getBody();
+        return (List<String>) claims.get("roles");
     }
 
     // Exceptions personnalisées
@@ -100,26 +82,31 @@ public class JwtTokenProvider {
             super(message);
         }
     }
+
     public static class JwtExpiredException extends JwtAuthenticationException {
         public JwtExpiredException() {
             super("JWT expired");
         }
     }
+
     public static class JwtUnsupportedException extends JwtAuthenticationException {
         public JwtUnsupportedException() {
             super("JWT unsupported");
         }
     }
+
     public static class JwtMalformedException extends JwtAuthenticationException {
         public JwtMalformedException() {
             super("JWT malformed");
         }
     }
+
     public static class JwtSignatureException extends JwtAuthenticationException {
         public JwtSignatureException() {
             super("JWT signature invalid");
         }
     }
+
     public static class JwtInvalidArgumentException extends JwtAuthenticationException {
         public JwtInvalidArgumentException() {
             super("JWT arguments invalid");

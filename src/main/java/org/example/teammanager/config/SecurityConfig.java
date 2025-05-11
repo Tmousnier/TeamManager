@@ -56,7 +56,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/connexion/**",
                                 "/api/clubs/**",
-                                "/api/accueil/**"
+                                "/api/accueil/**",
+                                "/api/contact/**",
+                                "/api/club-dashboard/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
