@@ -11,6 +11,8 @@ const InscriptionClub = () => {
         dateNaissance: '',
         nomClub: '',
         sport: '',
+        idMembre: '',
+        nomEquipe: '',
     });
 
     const [messageSucces, setMessageSucces] = useState('');

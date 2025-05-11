@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import {Link, useNavigate} from "react-router-dom"; // Pour la redirection
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./connexion.css";
 
@@ -10,19 +10,15 @@ const Login = () => {
     const [isFormValid, setIsFormValid] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-
-    const navigate = useNavigate(); // Redirection
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Validation du formulaire
         setIsFormValid(email !== "" && password !== "" && !emailError && !passwordError);
     }, [email, password, emailError, passwordError]);
 
     const validateEmail = (email: string) => {
-        // Vérification si l'email est valide
         const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         if (!email) {
             setEmailError("Il faut entrer un email.");
@@ -34,7 +30,6 @@ const Login = () => {
     };
 
     const validatePassword = (password: string) => {
-        // Vérification si le mot de passe est vide
         if (!password) {
             setPasswordError("Il faut entrer un mot de passe.");
         } else {
@@ -46,25 +41,31 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post("http://localhost:8080/api/connexion/login", { email, password });
+            console.log(response.data);
 
-            // Stocker le token, email et rôle
-            localStorage.setItem("token", response.data.token);
+            const token = response.data.token;
+            localStorage.setItem("token", token);
             localStorage.setItem("email", response.data.email);
             localStorage.setItem("role", response.data.role);
-            localStorage.setItem("idEquipe", response.data.id);
-            localStorage.setItem("idClub", response.data.idMembre);
-            localStorage.setItem("nomEquipe", response.data.nomEquipe);
+            localStorage.setItem("nomEquipe", response.data.equipeName ?? "");
+            localStorage.setItem("nomClub", response.data.nomClub ?? "");
+            localStorage.setItem("nom", response.data.nom ?? "");
+            localStorage.setItem("prenom", response.data.prenom ?? "");
 
-
-            alert("Connexion réussie !");
-            if (response.data.role === 'Dirigeant') {
-                navigate('/');
+            const nomClubFromResponse = response.data.nomClub;
+            if (nomClubFromResponse) {
+                localStorage.setItem("nomClub", nomClubFromResponse);
+                navigate(`/${nomClubFromResponse}/dashboard/`);
             } else {
-                navigate(`/equipe/${response.data.nomEquipe}`);
+                console.error("Club name not found in response.");
+                setErrorMessage("Erreur de redirection: Club non trouvé dans la réponse.");
             }
         } catch (error) {
-            // @ts-ignore
-            setErrorMessage(error.response?.data?.message || "Erreur de connexion");
+            if (axios.isAxiosError(error) && error.response) {
+                setErrorMessage(error.response.data?.message ?? "Erreur de connexion");
+            } else {
+                setErrorMessage("Erreur de connexion");
+            }
         }
     };
 

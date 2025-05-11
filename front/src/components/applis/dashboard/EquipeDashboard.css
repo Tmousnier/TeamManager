@@ -1,0 +1,92 @@
+.dashboard-container {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f5f7;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+.team-info,
+.upcoming-events,
+.recent-notifications,
+.internal-messages {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.team-info h2 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 5px;
+}
+.team-info p {
+    color: #7f8c8d;
+    margin-bottom: 5px;
+}
+.upcoming-events h2,
+.recent-notifications h2,
+.internal-messages h2 {
+    color: #3498db;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e7f2fa;
+    padding-bottom: 8px;
+}
+.upcoming-events ul,
+.recent-notifications ul,
+.internal-messages ul {
+    list-style: none;
+    padding: 0;
+}
+.upcoming-events li,
+.recent-notifications li,
+.internal-messages li {
+    padding: 15px 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+.upcoming-events li:last-child,
+.recent-notifications li:last-child,
+.internal-messages li:last-child {
+    border-bottom: none;
+}
+.upcoming-events li h3 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.upcoming-events li p {
+    color: #7f8c8d;
+    margin-bottom: 5px;
+}
+.recent-notifications li p {
+    color: #34495e;
+    margin-bottom: 5px;
+}
+.recent-notifications li small {
+    color: #95a5a6;
+}
+.internal-messages li strong {
+    color: #e67e22;
+    font-weight: bold;
+    margin-right: 5px;
+}
+.internal-messages li small {
+    color: #95a5a6;
+    display: block;
+    margin-top: 5px;
+}
+.internal-messages li div {
+    color: #2980b9;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+.upcoming-events p:last-child {
+    margin-bottom: 0;
+}
+.recent-notifications p:last-child {
+    margin-bottom: 0;
+}
+.internal-messages p:last-child {
+    margin-bottom: 0;
+}
