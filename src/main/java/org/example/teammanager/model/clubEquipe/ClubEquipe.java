@@ -1,28 +1,30 @@
-package org.example.teammanager.model.equipeMembre;
+package org.example.teammanager.model.clubEquipe;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.teammanager.model.club.Club;
 import org.example.teammanager.model.equipe.Equipe;
-import org.example.teammanager.model.membre.Membre;
 
-@Entity
-@Table(name = "equipe_membre")
+
 @Data
+@Entity
 @NoArgsConstructor
-public class EquipeMembre {
+@AllArgsConstructor
+@Table(name = "club_equipe")
+
+public class ClubEquipe {
     @EmbeddedId
-    private EquipeMembreId id;
+    private ClubEquipeId id;
+
+    @ManyToOne
+    @MapsId("idClub")
+    @JoinColumn(name = "id_club")
+    private Club club;
 
     @ManyToOne
     @MapsId("idEquipe")
     @JoinColumn(name = "id_equipe")
     private Equipe equipe;
-
-    @ManyToOne
-    @MapsId("idMembre")
-    @JoinColumn(name = "id_membre")
-    private Membre membre;
 }
-

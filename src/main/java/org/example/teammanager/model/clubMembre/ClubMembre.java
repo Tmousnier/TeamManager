@@ -16,12 +16,12 @@ public class ClubMembre {
         private ClubMembreId id;
 
         @ManyToOne
-        @MapsId("idClub") // Lie idClub de ClubMembreId à la relation Club
-        @JoinColumn(name = "id_club", referencedColumnName = "id")
+        @MapsId("idClub")
+        @JoinColumn(name = "id_club")
         private Club club;
 
         @ManyToOne
-        @MapsId("idMembre") // Lie idMembre de ClubMembreId à la relation Membre
-        @JoinColumn(name = "id_membre", referencedColumnName = "id")
+        @MapsId("idMembre")
+        @JoinColumn(name = "id_membre")
         private Membre membre;
 }

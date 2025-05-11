@@ -14,6 +14,6 @@ import java.io.Serializable;
 @Embeddable
 public class MembreRoleMembreId implements Serializable {
 
-    private Integer membre; // Correspond à l'ID du membre
-    private Integer roleMembre; // Correspond à l'ID du rôle de membre
+    private Integer idMembre; // Correspond à l'ID du membre
+    private Integer idRoleMembre; // Correspond à l'ID du rôle de membre
 }

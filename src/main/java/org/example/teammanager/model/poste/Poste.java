@@ -1,15 +1,26 @@
 package org.example.teammanager.model.poste;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.example.teammanager.model.joueurPoste.JoueurPoste;
+import org.hibernate.boot.beanvalidation.IntegrationException;
+
+import java.util.List;
 
 @Entity
-@Data
 @Table(name = "poste")
+@Data
+@NoArgsConstructor
 public class Poste {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer idPoste;
+
+    @Column(name = "nom")
     private String nom;
+
+    @OneToMany(mappedBy = "poste")
+    private List<JoueurPoste> joueurPostes;
 }

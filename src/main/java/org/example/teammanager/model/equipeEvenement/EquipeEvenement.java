@@ -11,16 +11,17 @@ import org.example.teammanager.model.evenement.Evenement;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EquipeEvenement {
+
     @EmbeddedId
     private EquipeEvenementId id;
 
     @ManyToOne
     @MapsId("idEquipe")
-    @JoinColumn(name = "id_Equipe", referencedColumnName = "id")
+    @JoinColumn(name = "id_equipe")
     private Equipe equipe;
 
     @ManyToOne
     @MapsId("idEvenement")
-    @JoinColumn(name = "id_Evenement", referencedColumnName = "id")
+    @JoinColumn(name = "id_evenement")
     private Evenement evenement;
 }

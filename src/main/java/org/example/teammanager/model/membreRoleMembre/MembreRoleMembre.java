@@ -7,20 +7,22 @@ import org.example.teammanager.model.roleMembre.RoleMembre;
 
 @Data
 @Entity
-@IdClass(MembreRoleMembreId.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "membre_role_membre")
 public class MembreRoleMembre {
 
-    @Id
+    @EmbeddedId
+    private MembreRoleMembreId id;
+
     @ManyToOne
-    @JoinColumn(name = "id_membre", referencedColumnName = "id", nullable = false)
+    @MapsId("idMembre")
+    @JoinColumn(name = "id_membre")
     private Membre membre;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "id_role_membre", referencedColumnName = "id", nullable = false)
+    @MapsId("idRoleMembre")
+    @JoinColumn(name = "id_role_membre")
     private RoleMembre roleMembre;
 
 }

@@ -1,36 +1,64 @@
 package org.example.teammanager.model.membre;
 
-// ... (imports)
-
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.example.teammanager.model.clubMembre.ClubMembre;
+import org.example.teammanager.model.equipeMatche.EquipeMatche;
+import org.example.teammanager.model.equipeMembre.EquipeMembre;
+import org.example.teammanager.model.membreMessage.MembreMessage;
 import org.example.teammanager.model.membreRoleMembre.MembreRoleMembre;
-import org.example.teammanager.model.roleMembre.RoleMembre; // Import RoleMembre
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import jakarta.persistence.*;
 
 @Entity
+@Table(name = "membre")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Membre {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String nom;
-    private String prenom;
-    private String genre;
-    private LocalDate dateDeNaissance;
-    private String email;
-    private Integer numeroTelephone;
-    private String password;
-    private Date dateInscription;
+    @Column(name = "id")
+    private Integer idMembre;
 
-    @OneToMany(mappedBy = "membre", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Column(name = "date_de_naissance")
+    private LocalDate dateDeNaissance;
+
+    @Column(name = "date_inscription")
+    private LocalDate dateInscription;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "genre")
+    private String genre;
+
+    @Column(name = "nom")
+    private String nom;
+
+    @Column(name = "numero_telephone")
+    private String numeroTelephone;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "prenom")
+    private String prenom;
+
+    @Column(name = "statut")
+    private String statut;
+
+    @OneToMany(mappedBy = "membre")
     private List<MembreRoleMembre> membreRoleMembres;
+
+    @OneToMany(mappedBy = "membre")
+    private List<ClubMembre> clubMembres;
+
+    @OneToMany(mappedBy = "membre")
+    private List<MembreMessage> membreMessages;
+
+    @OneToMany(mappedBy = "membre")
+    private List<EquipeMembre> equipeMembres;
 }

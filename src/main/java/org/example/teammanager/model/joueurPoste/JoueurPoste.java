@@ -2,24 +2,26 @@ package org.example.teammanager.model.joueurPoste;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.teammanager.model.joueur.Joueur;
 import org.example.teammanager.model.poste.Poste;
 
 @Entity
 @Table(name = "joueur_poste")
 @Data
+@NoArgsConstructor
 public class JoueurPoste {
 
     @EmbeddedId
     private JoueurPosteId id;
 
     @ManyToOne
-    @MapsId("idJoueur") // Lie le champ idJoueur de JoueurPosteId à cette relation
-    @JoinColumn(name = "id_joueur", referencedColumnName = "id") // Nom de colonne corrigé
-    private Joueur joueur; // Nom de variable corrigé
+    @MapsId("idJoueur")
+    @JoinColumn(name = "id_joueur", referencedColumnName = "id")
+    private Joueur joueur;
 
     @ManyToOne
-    @MapsId("idPoste") // Lie le champ idPoste de JoueurPosteId à cette relation
-    @JoinColumn(name = "id_poste", referencedColumnName = "id") // Nom de colonne corrigé
-    private Poste poste; // Nom de variable corrigé
+    @MapsId("idPoste")
+    @JoinColumn(name = "id_poste", referencedColumnName = "id")
+    private Poste poste;
 }

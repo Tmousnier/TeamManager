@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Embeddable
 public class SportClubId implements Serializable {
 
-    private Integer sport;
-    private Integer club;
+    private Integer idSport;
+    private Integer idClub;
 
 }

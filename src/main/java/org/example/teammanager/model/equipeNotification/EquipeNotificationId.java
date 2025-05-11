@@ -1,4 +1,4 @@
-package org.example.teammanager.model.membreMessage;
+package org.example.teammanager.model.equipeNotification;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Embeddable
-public class MembreMessageId implements Serializable {
-    private Integer idMembre;
-    private Integer idMessage;
+public class EquipeNotificationId implements Serializable {
+    private Integer idEquipe;
+    private Integer idNotification;
 }

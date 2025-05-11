@@ -5,24 +5,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.teammanager.model.club.Club;
+import org.example.teammanager.model.membreMessage.MembreMessageId;
 import org.example.teammanager.model.sport.Sport;
 
 @Data
 @Entity
-@IdClass(SportClubId.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "sport_club")
 public class SportClub {
 
-    @Id
+    @EmbeddedId
+    private SportClubId id;
+
     @ManyToOne
-    @JoinColumn(name = "id_club", nullable = false)
+    @MapsId("idClub")
+    @JoinColumn(name = "id_club")
     private Club club;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "id_sport", nullable = false)
+    @MapsId("idSport")
+    @JoinColumn(name = "id_sport")
     private Sport sport;
 
 }
