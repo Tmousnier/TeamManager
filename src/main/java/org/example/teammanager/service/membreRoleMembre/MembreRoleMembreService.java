@@ -17,7 +17,7 @@ public class MembreRoleMembreService {
     private MembreRoleMembreRepository membreRoleMembreRepository;
 
     public List<MembreRoleMembre> findByMembreId(Membre membre) {
-        return membreRoleMembreRepository.findByMembreId(membre.getId());
+        return membreRoleMembreRepository.findByMembre_IdMembre(membre.getIdMembre());
     }
 }
 
