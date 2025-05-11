@@ -53,7 +53,7 @@ public class Membre {
     @OneToMany(mappedBy = "membre")
     private List<MembreRoleMembre> membreRoleMembres;
 
-    @OneToMany(mappedBy = "membre")
+    @OneToMany(mappedBy = "membre", fetch = FetchType.EAGER)
     private List<ClubMembre> clubMembres;
 
     @OneToMany(mappedBy = "membre")
