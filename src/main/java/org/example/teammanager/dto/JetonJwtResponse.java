@@ -1,17 +1,22 @@
 package org.example.teammanager.dto;
 
-public class JetonJwtResponse {
-    public String token;
-    public String email;
-    public String role;
-    public String clubName;
-    public String equipeName;
 
-    public JetonJwtResponse(String token, String email, String role, String clubName, String equipeName) {
+public class JetonJwtResponse {
+    public final String token;
+    public final String email;
+    public final String role;
+    public final String nomClub;
+    public final String nomEquipe;
+    public final String prenom;
+    public final String nom;
+
+    public JetonJwtResponse(String token, String email, String role, String nomClub, String nomEquipe, String prenom, String nom) {
         this.token = token;
         this.email = email;
         this.role = role;
-        this.clubName = clubName;
-        this.equipeName = equipeName;
+        this.nomClub = nomClub;
+        this.nomEquipe = nomEquipe;
+        this.prenom = prenom;
+        this.nom = nom;
     }
 }
