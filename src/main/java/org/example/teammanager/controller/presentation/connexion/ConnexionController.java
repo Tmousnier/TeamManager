@@ -3,6 +3,7 @@ package org.example.teammanager.controller.presentation.connexion;
 import org.example.teammanager.config.JwtTokenProvider;
 import org.example.teammanager.dto.JetonJwtResponse;
 import org.example.teammanager.dto.contact.MessageErreurResponse;
+import org.example.teammanager.model.clubMembre.ClubMembre;
 import org.example.teammanager.model.membre.Membre;
 import org.example.teammanager.model.membreRoleMembre.MembreRoleMembre;
 import org.example.teammanager.service.membre.MembreService;
@@ -51,20 +52,48 @@ public class ConnexionController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Membre membre) {
         try {
-            Membre membreEnregistre = membreService.findByEmail(membre.getEmail()).orElseThrow();
+            Membre membreEnregistre = membreService.findByEmail(membre.getEmail())
+                    .orElseThrow(() -> new BadCredentialsException("Email ou mot de passe incorrect"));
+
             if (!passwordEncoder.matches(membre.getPassword(), membreEnregistre.getPassword())) {
                 throw new BadCredentialsException("Identifiants incorrects");
             }
+
             List<MembreRoleMembre> membreRoleMembres = membreRoleMembreService.findByMembreId(membreEnregistre);
             if (membreRoleMembres.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageErreurResponse("Rôle non trouvé pour ce membre"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new MessageErreurResponse("Rôle non trouvé pour ce membre"));
             }
+
             MembreRoleMembre membreRoleMembre = membreRoleMembres.getFirst();
             String nomRole = membreRoleMembre.getRoleMembre().getNomRole();
-            Authentication authentication = new UsernamePasswordAuthenticationToken(membre.getEmail(), membreEnregistre.getPassword(), List.of(new SimpleGrantedAuthority(nomRole)));
+            if (nomRole == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new MessageErreurResponse("Rôle non trouvé pour ce membre"));
+            }
+
+            ClubMembre clubMembre = membreEnregistre.getClubMembres().stream().findFirst().orElse(null);
+            String clubName = (clubMembre != null && clubMembre.getClub() != null) ? clubMembre.getClub().getNom() : null;
+            String equipeName = (clubMembre != null && clubMembre.getMembre() != null && !clubMembre.getMembre().getEquipeMembres().isEmpty())
+                    ? clubMembre.getMembre().getEquipeMembres().getFirst().getEquipe().getNom()
+                    : null;
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    membre.getEmail(),
+                    membreEnregistre.getPassword(),
+                    List.of(new SimpleGrantedAuthority(nomRole))
+            );
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
             String jetonJwt = jwtTokenProvider.generateToken(membreRoleMembre);
-            return ResponseEntity.ok(new JetonJwtResponse(jetonJwt, membreEnregistre.getEmail(), authentication.getAuthorities().stream().findFirst().orElseThrow().getAuthority()));
+
+            return ResponseEntity.ok(new JetonJwtResponse(
+                    jetonJwt,
+                    membreEnregistre.getEmail(),
+                    authentication.getAuthorities().stream().findFirst().orElseThrow().getAuthority(),
+                    clubName,
+                    equipeName
+            ));
         } catch (AuthenticationException e) {
             String messageErreur = (e instanceof BadCredentialsException) ? "Email ou mot de passe incorrect" : "Erreur d'authentification";
             logger.error(messageErreur, e);
