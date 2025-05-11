@@ -59,29 +59,22 @@ public class ConnexionController {
                 throw new BadCredentialsException("Identifiants incorrects");
             }
 
-            List<MembreRoleMembre> membreRoleMembres = membreRoleMembreService.findByMembreId(membreEnregistre);
-            if (membreRoleMembres.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new MessageErreurResponse("Rôle non trouvé pour ce membre"));
-            }
+            MembreRoleMembre membreRoleMembre = membreRoleMembreService.findByMembreId(membreEnregistre).getFirst();
 
-            MembreRoleMembre membreRoleMembre = membreRoleMembres.getFirst();
-            String nomRole = membreRoleMembre.getRoleMembre().getNomRole();
-            if (nomRole == null) {
+            if (membreRoleMembre == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new MessageErreurResponse("Rôle non trouvé pour ce membre"));
             }
 
             ClubMembre clubMembre = membreEnregistre.getClubMembres().stream().findFirst().orElse(null);
-            String clubName = (clubMembre != null && clubMembre.getClub() != null) ? clubMembre.getClub().getNom() : null;
-            String equipeName = (clubMembre != null && clubMembre.getMembre() != null && !clubMembre.getMembre().getEquipeMembres().isEmpty())
-                    ? clubMembre.getMembre().getEquipeMembres().getFirst().getEquipe().getNom()
-                    : null;
-
+            String nomClub = (clubMembre != null && clubMembre.getClub() != null) ? clubMembre.getClub().getNom() : null;
+            String nomEquipe = (clubMembre != null && clubMembre.getMembre() != null && !clubMembre.getMembre().getEquipeMembres().isEmpty()) ? clubMembre.getMembre().getEquipeMembres().getFirst().getEquipe().getNom() : null;
+            String prenom = membreEnregistre.getPrenom();
+            String nom = membreEnregistre.getNom();
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     membre.getEmail(),
                     membreEnregistre.getPassword(),
-                    List.of(new SimpleGrantedAuthority(nomRole))
+                    List.of(new SimpleGrantedAuthority(membreRoleMembre.getRoleMembre().getNomRole()))
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -91,9 +84,12 @@ public class ConnexionController {
                     jetonJwt,
                     membreEnregistre.getEmail(),
                     authentication.getAuthorities().stream().findFirst().orElseThrow().getAuthority(),
-                    clubName,
-                    equipeName
+                    nomClub,
+                    nomEquipe != null ? nomEquipe : "Aucune équipe associée", // Afficher un message par défaut si nomEquipe est null
+                    nom,
+                    prenom
             ));
+
         } catch (AuthenticationException e) {
             String messageErreur = (e instanceof BadCredentialsException) ? "Email ou mot de passe incorrect" : "Erreur d'authentification";
             logger.error(messageErreur, e);

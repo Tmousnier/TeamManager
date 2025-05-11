@@ -5,7 +5,6 @@ import org.example.teammanager.mapper.ClubMapper;
 import org.example.teammanager.model.club.Club;
 import org.example.teammanager.model.membre.Membre;
 import org.example.teammanager.model.membreRoleMembre.MembreRoleMembre;
-import org.example.teammanager.model.membreRoleMembre.MembreRoleMembreId;
 import org.example.teammanager.model.roleMembre.RoleMembre;
 import org.example.teammanager.model.sport.Sport;
 import org.example.teammanager.model.sportClub.SportClub;

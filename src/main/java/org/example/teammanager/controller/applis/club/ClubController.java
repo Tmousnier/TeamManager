@@ -13,21 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clubs/{clubId}")
+@RequestMapping("/api/clubs/{nomClub}")
 public class ClubController {
 
     @Autowired
     private ClubService clubService;
 
     @GetMapping("/events")
-    public ResponseEntity<List<EvenementDto>> getClubEvents(@PathVariable Integer clubId) {
-        List<EvenementDto> events = clubService.getEventsForClub(clubId);
+    public ResponseEntity<List<EvenementDto>> getClubEvents(@PathVariable String nomClub) {
+        List<EvenementDto> events = clubService.getEventsForClub(nomClub);
         return ResponseEntity.ok(events);
     }
 
     @GetMapping("/members")
-    public ResponseEntity<List<MembreDto>> getClubMembers(String clubName) {
-        List<MembreDto> members = clubService.getMembersForClub(clubName);
+    public ResponseEntity<List<MembreDto>> getClubMembers(@PathVariable String nomClub) {
+        List<MembreDto> members = clubService.getMembersForClub(nomClub);
         return ResponseEntity.ok(members);
     }
 }

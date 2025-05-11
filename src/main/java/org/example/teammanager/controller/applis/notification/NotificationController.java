@@ -20,9 +20,9 @@ public class NotificationController {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    @GetMapping("/{clubName}")
-    public ResponseEntity<List<NotificationDto>> getAllNotificationsByClub(@PathVariable String clubName) {
-        List<NotificationDto> notifications = notificationRepository.findByClubName(clubName)
+    @GetMapping("/{nomClub}") // Corrected route
+    public ResponseEntity<List<NotificationDto>> getAllNotificationsByClub(@PathVariable String nomClub) {
+        List<NotificationDto> notifications = notificationRepository.findByNomClub(nomClub)
                 .stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
