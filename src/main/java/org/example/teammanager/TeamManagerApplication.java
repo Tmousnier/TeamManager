@@ -2,14 +2,12 @@ package org.example.teammanager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.example.teammanager", "org.example.teammanager.service", "org.example.teammanager.config"}) // Inclure les packages pertinents
+@EnableConfigurationProperties
 public class TeamManagerApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(TeamManagerApplication.class, args);
     }
-
 }
