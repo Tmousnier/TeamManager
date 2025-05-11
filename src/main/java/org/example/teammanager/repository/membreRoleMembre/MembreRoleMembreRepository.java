@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface MembreRoleMembreRepository extends JpaRepository<MembreRoleMembre, MembreRoleMembreId> {
-    List<MembreRoleMembre> findByMembreId(int idMembre); // Utilise la relation membre
-    List<MembreRoleMembre> findByRoleMembreId(int idRoleMembre); // Utilise la relation roleMembre
+    List<MembreRoleMembre> findByMembre_IdMembre(Integer idMembre); // Utilise la relation membre
 }

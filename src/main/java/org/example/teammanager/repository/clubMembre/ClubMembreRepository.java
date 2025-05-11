@@ -4,5 +4,8 @@ import org.example.teammanager.model.clubMembre.ClubMembre;
 import org.example.teammanager.model.clubMembre.ClubMembreId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface ClubMembreRepository extends JpaRepository<ClubMembre, ClubMembreId> {
+    Optional<ClubMembre> findByClubNom(String clubNom);
 }

@@ -8,9 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
 public interface EvenementRepository extends JpaRepository<Evenement, Integer> {
-    @Query("SELECT ee.evenement FROM EquipeEvenement ee WHERE ee.equipe.id = :equipeId")
-    List<Evenement> findByEquipeId(@Param("equipeId") int equipeId);
+    @Query("SELECT e FROM Evenement e JOIN e.equipe.equipeEvenements ee JOIN ee.equipe.clubEquipes ce WHERE ce.club.id = :clubId")
+    List<Evenement> findAllByClubId(@Param("clubId") Integer clubId);
 }
