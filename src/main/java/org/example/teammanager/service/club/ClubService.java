@@ -44,29 +44,44 @@ public class ClubService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+
     public Optional<ClubDTO> getClubById(Integer id) {
         return clubRepository.findById(id).map(this::convertToDTO);
     }
+
     public ClubDTO createClub(ClubDTO clubDTO) {
         Club club = convertToEntity(clubDTO);
         Club savedClub = clubRepository.save(club);
         return convertToDTO(savedClub);
     }
-    public void deleteClub(Integer id) {
-        clubRepository.deleteById(id);
+    public ClubDTO updateClub(Integer id, ClubDTO clubDTO) {
+        return clubRepository.findById(id)
+                .map(club -> {
+                    club.setNom(clubDTO.getNom());
+                    club.setVille(clubDTO.getVille());
+                    club.setDateCreation(LocalDate.from(clubDTO.getDateCreation()));
+                    club.setDescription(clubDTO.getDescription());
+                    club.setPays(clubDTO.getPays());
+                    club.setNumeroTelephone(clubDTO.getNumeroTelephone());
+                    return convertToDTO(clubRepository.save(club));
+                })
+                .orElse(null);
     }
 
-    public List<EvenementDto> getEventsForClub(Integer clubId) {
-        return evenementRepository.findAllByClubId(clubId)
+    public List<EvenementDto> getEventsForClub(String nomClub) {
+        Club club = clubRepository.findByNom(nomClub);
+        if(club == null) return List.of();
+        return evenementRepository.findAllByClubId(club.getId())
                 .stream()
-                .filter(Objects::nonNull) // Filtrer uniquement les objets de type Evenement
-                .map(Evenement.class::cast) // Caster explicitement en Evenement
+                .filter(Objects::nonNull)
+                .map(Evenement.class::cast)
                 .map(this::evenementConvertToDto)
                 .collect(Collectors.toList());
     }
 
-    public List<MembreDto> getMembersForClub(String club) {
-        Optional<ClubMembre> clubMembres = clubMembreRepository.findByClubNom(club);
+    public List<MembreDto> getMembersForClub(String nomClub) {
+        Optional<ClubMembre> clubMembres = clubMembreRepository.findByClub_Nom(nomClub); // Corrected method name
+        if(clubMembres.isEmpty()) return List.of();
         return clubMembres.stream()
                 .map(cm -> {
                     Membre membre = cm.getMembre();
@@ -88,8 +103,9 @@ public class ClubService {
                 })
                 .collect(Collectors.toList());
     }
-    public List<NotificationDto> getNotificationsForClub(String club) {
-        List<Notification> notifications = notificationRepository.findByClubName(club);
+
+    public List<NotificationDto> getNotificationsForClub(String nomClub) {
+        List<Notification> notifications = notificationRepository.findByNomClub(nomClub);
         return notifications.stream()
                 .map(this::notificationConvertToDto)
                 .collect(Collectors.toList());
@@ -105,6 +121,7 @@ public class ClubService {
         clubDTO.setNumeroTelephone(club.getNumeroTelephone());
         return clubDTO;
     }
+
     private Club convertToEntity(ClubDTO clubDTO) {
         Club club = new Club();
         club.setNom(clubDTO.getNom());
@@ -115,6 +132,7 @@ public class ClubService {
         club.setNumeroTelephone(clubDTO.getNumeroTelephone());
         return club;
     }
+
     private EvenementDto evenementConvertToDto(Evenement evenement) {
         EvenementDto dto = new EvenementDto();
         dto.setNom(evenement.getNom());
@@ -123,6 +141,7 @@ public class ClubService {
         dto.setLieux(evenement.getLieux());
         return dto;
     }
+
     private NotificationDto notificationConvertToDto(Notification notification) {
         NotificationDto dto = new NotificationDto();
         dto.setContenu(notification.getContenu());

@@ -5,6 +5,7 @@ import org.example.teammanager.repository.membre.MembreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,16 +17,8 @@ public class MembreService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-    public void enregistrerMembre(Membre membre) {
-        String motDePasseHache = passwordEncoder.encode(membre.getPassword());
-        membre.setPassword(motDePasseHache);
-        membreRepository.save(membre);
-    }
+    @Transactional
     public Optional<Membre> findByEmail(String email) {
-        return membreRepository.findByEmail(email); // <-- This call will now work
-    }
-    public long countAllMembers() {
-        return membreRepository.count();
+        return membreRepository.findByEmail(email);
     }
 }
