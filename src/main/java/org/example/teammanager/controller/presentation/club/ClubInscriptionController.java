@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RestController
@@ -57,7 +58,7 @@ public class ClubInscriptionController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Le nom du club existe déjà.");
             }
             Club club = clubMapper.inscribe(clubInscriptionDTO);
-            club.setDateCreation(LocalDateTime.now());
+            club.setDateCreation(LocalDate.now());
             club = clubRepository.save(club);
             // Création du membre
             Membre membre = new Membre();
