@@ -6,7 +6,7 @@ import LayoutPublic from "./layouts/LayoutPublic";
 import LayoutApp from "./layouts/LayoutApp";
 
 import { presentationRoutes } from "./routes/PresentationRoutes";
-import { applicationRoutes } from "./routes/ApplicationRoutes";
+import applicationRoutes from "./routes/ApplicationRoutes";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
