@@ -6,8 +6,6 @@ import org.example.teammanager.dto.sportClub.SportClubDTO;
 import org.example.teammanager.model.club.Club;
 import org.example.teammanager.model.sport.Sport;
 import org.example.teammanager.model.sportClub.SportClub;
-import org.example.teammanager.repository.club.ClubRepository;
-import org.example.teammanager.repository.sport.SportRepository;
 import org.example.teammanager.repository.sportClub.SportClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +33,7 @@ public class SportClubService {
     }
 
     public List<SportClubDTO> getSportClubsBySportId(int idSport) {
-        return sportClubRepository.findBySportId(idSport).stream()
+        return sportClubRepository.findBySport_IdSport(idSport).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -58,8 +56,7 @@ public class SportClubService {
         ClubDTO clubDTO = new ClubDTO();
         clubDTO.setNom(club.getNom());
         clubDTO.setVille(club.getVille());
-        clubDTO.setAddresse(club.getAddresse());
-        clubDTO.setDateCreation(club.getDateCreation());
+        clubDTO.setDateCreation(club.getDateCreation().atStartOfDay());
         clubDTO.setDescription(club.getDescription());
         clubDTO.setPays(club.getPays());
         clubDTO.setNumeroTelephone(club.getNumeroTelephone());
